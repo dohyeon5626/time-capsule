@@ -157,11 +157,12 @@ const Loading = () => (
 
 // Ad Banner Component
 const AdBanner = ({ className }) => (
-  <div className={`w-full h-20 bg-slate-900/50 border border-slate-800/50 rounded-xl flex flex-col items-center justify-center relative overflow-hidden group transition-colors hover:bg-slate-800/50 ${className}`}>
-     <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.02)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-[position:-100%_0,0_0] group-hover:bg-[position:200%_0,0_0] transition-all duration-1000"></div>
-     <span className="text-[10px] text-slate-600 font-medium tracking-widest uppercase mb-1">Advertisement</span>
-     <span className="text-xs text-slate-500">광고 영역</span>
-  </div>
+  // <div className={`w-full h-20 bg-slate-900/50 border border-slate-800/50 rounded-xl flex flex-col items-center justify-center relative overflow-hidden group transition-colors hover:bg-slate-800/50 ${className}`}>
+  //    <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.02)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-[position:-100%_0,0_0] group-hover:bg-[position:200%_0,0_0] transition-all duration-1000"></div>
+  //    <span className="text-[10px] text-slate-600 font-medium tracking-widest uppercase mb-1">Advertisement</span>
+  //    <span className="text-xs text-slate-500">광고 영역</span>
+  // </div>
+  <div></div>
 );
 
 const InputGroup = ({ label, icon: Icon, required, error, children, className, action }) => (
@@ -184,11 +185,9 @@ const AutoTextArea = ({ value, onChange, placeholder, className, minHeight = "12
 
   useEffect(() => {
     if (textareaRef.current) {
-      // Reset height to shrink if needed
       textareaRef.current.style.height = minHeight; 
       const scrollHeight = textareaRef.current.scrollHeight;
       
-      // Always expand to fit content (no max height limit as requested)
       textareaRef.current.style.height = `${Math.max(scrollHeight, parseInt(minHeight))}px`;
       textareaRef.current.style.overflowY = "hidden";
     }
@@ -428,7 +427,7 @@ export default function App() {
   const [errors, setErrors] = useState({}); 
 
   const [viewUnlockPassword, setViewUnlockPassword] = useState('');
-  const [showViewPassword, setShowViewPassword] = useState(false); // Added state for view password visibility
+  const [showViewPassword, setShowViewPassword] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [forceUnlock, setForceUnlock] = useState(false);
   const [unlockError, setUnlockError] = useState('');
@@ -442,7 +441,6 @@ export default function App() {
   const [viewCapsuleData, setViewCapsuleData] = useState(null);
   const [timeLeft, setTimeLeft] = useState({});
 
-  // Initialization
   useEffect(() => {
     let uid = localStorage.getItem('tc_uid');
     if (!uid) {
@@ -473,7 +471,6 @@ export default function App() {
     }
   }, [view, viewCapsuleData]);
 
-  // Clear errors when switching views
   useEffect(() => {
       setErrors({});
   }, [view]);
@@ -565,14 +562,11 @@ export default function App() {
         if (!firstErrorId) firstErrorId = elementId;
     };
 
-    // Visual Order
-    // 1. Sender
     if (!formData.from.trim()) setError('from', "보내는 사람을 입력해주세요.", 'input-from');
     
     if (!formData.senderPhone.trim()) setError('senderPhone', "전화번호를 입력해주세요.", 'input-senderPhone');
     else if (!isValidPhoneNumber(formData.senderPhone)) setError('senderPhone', "올바른 전화번호 형식이 아닙니다.", 'input-senderPhone');
 
-    // 2. Recipients
     recipients.forEach((r, i) => {
         if (!r.name.trim()) setError(`recipient_${i}_name`, "받는 사람을 입력해주세요.", `input-recipient-${i}-name`);
         
@@ -580,10 +574,8 @@ export default function App() {
         else if (!isValidPhoneNumber(r.phone)) setError(`recipient_${i}_phone`, "올바른 전화번호 형식이 아닙니다.", `input-recipient-${i}-phone`);
     });
 
-    // 3. Open Date
     if (!formData.openDate) setError('openDate', "개봉 날짜를 선택해주세요.", 'input-openDate');
 
-    // 4. Message
     if (!formData.message.trim()) setError('message', "메시지를 입력해주세요.", 'input-message');
     if (formData.message.length > 3000) setError('message', "메시지는 3000자까지 입력 가능합니다.", 'input-message');
 
@@ -613,9 +605,8 @@ export default function App() {
         from: formData.from,
         senderPhone: formData.senderPhone,
         message: formData.message,
-        openDate: formData.openDate, // Stored as ISO string
+        openDate: formData.openDate,
         passwordKey: formData.passwordKey,
-        // createdAt is handled by server (or mock)
       });
       
       setCreatedCapsuleId(newId);
@@ -651,7 +642,7 @@ export default function App() {
         setViewUnlockPassword('');
         setUnlockError('');
         setIsDecrypting(false);
-        setShowViewPassword(false); // Reset password visibility
+        setShowViewPassword(false);
       } else {
         setManualIdError("해당 코드를 가진 캡슐을 찾을 수 없습니다.");
       }
@@ -709,7 +700,6 @@ export default function App() {
       
       setToastMessage("이미지 저장 중...");
       
-      // Dynamically load html2canvas
       if (!window.html2canvas) {
           const script = document.createElement('script');
           script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
@@ -732,8 +722,6 @@ export default function App() {
           });
       }
   };
-
-  // --- Render Views ---
 
   const renderHome = () => (
     <div className="min-h-screen bg-[#0f172a] text-white flex flex-col font-sans relative overflow-hidden">
@@ -809,7 +797,6 @@ export default function App() {
         </div>
 
         <div className="mt-auto">
-            {/* AD Placement: Below main content in Home */}
            <div className="mb-4">
              <AdBanner />
            </div>
@@ -876,7 +863,7 @@ export default function App() {
 
       {isIdModalOpen && (
         <div 
-            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
             onClick={() => {
                 setIsIdModalOpen(false); 
                 setManualId('');
@@ -884,7 +871,7 @@ export default function App() {
             }}
         >
           <div 
-            className="bg-[#1e293b] sm:rounded-2xl rounded-t-2xl p-6 w-full max-w-sm border-t sm:border border-slate-700 shadow-2xl animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300"
+            className="bg-[#1e293b] rounded-2xl p-6 w-full max-w-sm border border-slate-700 shadow-2xl animate-in slide-in-from-bottom-0 zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
@@ -941,7 +928,7 @@ export default function App() {
                 </h3>
                 
                 <div className="space-y-6">
-                    {/* Step 1 */}
+
                     <div className="flex gap-4">
                         <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 text-blue-400 font-bold text-sm">1</div>
                         <div>
@@ -950,7 +937,6 @@ export default function App() {
                         </div>
                     </div>
                     
-                    {/* Step 2 */}
                     <div className="flex gap-4">
                         <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 text-purple-400 font-bold text-sm">2</div>
                         <div>
@@ -959,7 +945,6 @@ export default function App() {
                         </div>
                     </div>
 
-                    {/* Step 3 */}
                     <div className="flex gap-4">
                         <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 text-emerald-400 font-bold text-sm">3</div>
                         <div>
@@ -968,7 +953,6 @@ export default function App() {
                         </div>
                     </div>
 
-                    {/* Step 4 */}
                     <div className="flex gap-4">
                         <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0 text-amber-400 font-bold text-sm">4</div>
                         <div>
@@ -1009,7 +993,6 @@ export default function App() {
             </div>
 
             <div className="space-y-8">
-                {/* Sender Section */}
                 <div className="space-y-3">
                     <label className="flex items-center text-sm font-semibold text-slate-300">
                         <User className="w-4 h-4 mr-1.5 text-blue-400" />
@@ -1045,7 +1028,6 @@ export default function App() {
                     }
                 </div>
                 
-                {/* Recipient Section */}
                 <div className="space-y-3">
                     <div className="flex justify-between items-end mb-1">
                         <label className="flex items-center text-sm font-semibold text-slate-300"><Send className="w-4 h-4 mr-1.5 text-blue-400" /> 받는 사람 <span className="text-rose-500 ml-1">*</span></label>
@@ -1198,9 +1180,7 @@ export default function App() {
     </div>
   );
 
-  // Unlocked View (Updated)
   const renderUnlocked = () => {
-      // Calculate deletion date
       const openDateObj = new Date(viewCapsuleData.openDate);
       const deletionDate = new Date(openDateObj);
       deletionDate.setFullYear(openDateObj.getFullYear() + 1);
@@ -1248,7 +1228,6 @@ export default function App() {
                     </div>
                 </div>
 
-                {/* Content Area - Removed max height and scroll */}
                 <div className="mb-8 relative">
                     <p className="whitespace-pre-wrap leading-loose text-slate-100 text-sm font-light relative z-10">
                         {viewCapsuleData.message}
@@ -1271,7 +1250,6 @@ export default function App() {
                         </div>
                     </div>
                     
-                    {/* Copy Button (Moved to Bottom Right) */}
                     <button 
                         onClick={() => handleCopyToClipboard(viewCapsuleData.message, "내용이 복사되었습니다.")}
                         className="text-[10px] flex items-center gap-1 text-slate-400 hover:text-blue-400 transition-colors bg-slate-800 px-2 py-1 rounded h-fit"
@@ -1302,7 +1280,7 @@ export default function App() {
     const isOpen = new Date() >= new Date(viewCapsuleData.openDate) || forceUnlock;
     const needsPassword = viewCapsuleData.passwordKey && !isUnlocked;
 
-    if (!isOpen) { // Locked State
+    if (!isOpen) {
         return (
             <div className="min-h-screen bg-[#0f172a] text-white p-6 flex flex-col items-center justify-center font-sans">
                 <button onClick={() => setView('home')} className="absolute top-6 left-6 text-slate-400 hover:text-white p-2 bg-slate-800/50 rounded-full transition-colors z-20"><ArrowRight className="w-6 h-6 rotate-180" /></button>
