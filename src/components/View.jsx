@@ -8,7 +8,7 @@ import {
     UserCheck, Send, Clock, Sparkles, Rocket, Hourglass, Shield, Home, Download, Camera,
     Mail, Database, BookOpen, Keyboard, Github, AlertTriangle, Star, ThumbsUp
 } from 'lucide-react';
-import { formatDate, calculateTimeLeft } from '../utils/helpers';
+import { formatDate, calculateTimeLeft } from '../etc/helpers';
 import AdBanner from './AdBanner';
 
 const UnlockedView = ({ viewCapsuleData, handleCopyToClipboard, handleShareInView, handleDownloadImage, setView }) => {

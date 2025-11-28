@@ -1,7 +1,7 @@
 import React from 'react';
 import { Check, AlertTriangle, Copy, Share2 } from 'lucide-react';
 import AdBanner from './AdBanner';
-import { formatDate } from '../utils/helpers';
+import { formatDate } from '../etc/helpers';
 
 const Success = ({
     formData,

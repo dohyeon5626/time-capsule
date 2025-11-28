@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CalendarIcon, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
-import { formatDateSimple } from '../utils/helpers';
+import { formatDateSimple } from '../etc/helpers';
 
 const CustomDatePicker = ({ value, onChange, error, id }) => {
   const [isOpen, setIsOpen] = useState(false);

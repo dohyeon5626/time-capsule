@@ -4,7 +4,7 @@ import {
     CalendarIcon, MessageSquare, ImageIcon, KeyRound, Lock, 
     Eye, EyeOff, AlertCircle 
 } from 'lucide-react';
-import { formatPhoneNumber } from '../utils/helpers';
+import { formatPhoneNumber } from '../etc/helpers';
 
 import InputGroup from './InputGroup';
 import CustomDatePicker from './CustomDatePicker';
@@ -135,7 +135,7 @@ const Create = ({
                             <div className="flex gap-2 mt-2 overflow-x-auto pb-1 no-scrollbar">
                                 <button onClick={() => setDateOffset('100days')} className="shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 rounded-lg transition-colors">+100일</button>
                                 <button onClick={() => setDateOffset('1year')} className="shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 rounded-lg transition-colors">+1년</button>
-                                <button onClick={() => setDateOffset('christmas')} className="shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-emerald-400/80 rounded-lg transition-colors">다가오는 크리스마스 🎄</button>
+                                <button onClick={() => setDateOffset('christmas')} className="shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs rounded-lg transition-colors">다가오는 크리스마스 🎄</button>
                             </div>
                         </InputGroup>
                     </div>
