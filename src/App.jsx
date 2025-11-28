@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from './api';
 import { 
-  formatPhoneNumber, isValidPhoneNumber, copyToClipboard, calculateTimeLeft, formatDate
+  formatPhoneNumber, isValidPhoneNumber, copyToClipboard
 } from './utils/helpers';
 
 import Loading from './components/Loading';
@@ -15,7 +15,6 @@ import GuideModal from './components/GuideModal';
 
 
 export default function App() {
-  const [user, setUser] = useState(null); 
   const [view, setView] = useState('home'); 
   const [loading, setLoading] = useState(true);
   const [isIdModalOpen, setIsIdModalOpen] = useState(false);
@@ -43,13 +42,6 @@ export default function App() {
   const [viewCapsuleData, setViewCapsuleData] = useState(null);
 
   useEffect(() => {
-    let uid = localStorage.getItem('tc_uid');
-    if (!uid) {
-        uid = 'anon_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('tc_uid', uid);
-    }
-    setUser({ uid });
-
     api.getStats().then(stats => {
         setCapsuleStats(stats);
         setLoading(false);
