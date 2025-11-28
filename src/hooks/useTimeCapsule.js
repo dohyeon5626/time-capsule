@@ -50,6 +50,7 @@ export const useTimeCapsule = () => {
         setManualId('');
         setManualIdError('');
       } else {
+        setIsIdModalOpen(true);
         setManualIdError("해당 코드를 가진 캡슐을 찾을 수 없습니다.");
       }
     } catch (error) {
