@@ -1,5 +1,5 @@
 export const formatDate = (dateInput) => {
-  if(!dateInput) return '';
+  if (!dateInput) return '';
   const date = new Date(dateInput);
   return new Intl.DateTimeFormat('ko-KR', {
     year: 'numeric',
@@ -7,7 +7,7 @@ export const formatDate = (dateInput) => {
     day: 'numeric',
     weekday: 'short',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   }).format(date);
 };
 
@@ -41,28 +41,36 @@ export const formatPhoneNumber = (value) => {
   const length = phoneNumber.length;
   if (length < 4) return phoneNumber;
   if (length < 8) return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
-  return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 7)}-${phoneNumber.slice(7, 11)}`;
+  return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(
+    3,
+    7
+  )}-${phoneNumber.slice(7, 11)}`;
 };
 
 export const isValidPhoneNumber = (phone) => {
-    const cleaned = ('' + phone).replace(/\D/g, '');
-    return /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/.test(cleaned);
+  const cleaned = ('' + phone).replace(/\D/g, '');
+  return /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/.test(cleaned);
 };
 
-export const copyToClipboard = (text) => {
+export const copyToClipboard = async (text) => {
   if (!text) return;
-  const textArea = document.createElement("textarea");
-  textArea.value = text;
-  textArea.style.position = "fixed";
-  textArea.style.left = "-9999px";
-  textArea.style.top = "0";
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
   try {
-    document.execCommand('copy');
+    await navigator.clipboard.writeText(text);
   } catch (err) {
-    console.error('Copy failed', err);
+    console.error('클립보드 복사에 실패했습니다.', err);
+    // Fallback for older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+    } catch (fallbackErr) {
+      console.error('Fallback 복사에 실패했습니다.', fallbackErr);
+    }
+    document.body.removeChild(textArea);
   }
-  document.body.removeChild(textArea);
 };

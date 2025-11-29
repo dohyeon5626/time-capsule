@@ -1,21 +1,28 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
-const AutoTextArea = ({ value, onChange, placeholder, className, minHeight = "12rem", id, maxLength }) => {
+const AutoTextArea = ({
+  value,
+  onChange,
+  placeholder,
+  className,
+  minHeight = '12rem',
+  id,
+  maxLength,
+}) => {
   const textareaRef = useRef(null);
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = minHeight; 
+      textareaRef.current.style.height = 'auto';
       const scrollHeight = textareaRef.current.scrollHeight;
-      
-      textareaRef.current.style.height = `${Math.max(scrollHeight, parseInt(minHeight))}px`;
-      textareaRef.current.style.overflowY = "hidden";
+      textareaRef.current.style.height = `${scrollHeight}px`;
+      textareaRef.current.style.overflowY = 'hidden';
     }
-  }, [value, minHeight]);
+  }, [value]);
 
   return (
     <div className="relative">
-        <textarea
+      <textarea
         id={id}
         ref={textareaRef}
         value={value}
@@ -24,12 +31,12 @@ const AutoTextArea = ({ value, onChange, placeholder, className, minHeight = "12
         className={className}
         style={{ minHeight }}
         maxLength={maxLength}
-        />
-        {maxLength && (
-            <div className="absolute bottom-3 right-3 text-[10px] text-slate-500 bg-slate-900/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
-                {value.length} / {maxLength}
-            </div>
-        )}
+      />
+      {maxLength && (
+        <div className="absolute bottom-3 right-3 text-[10px] text-slate-500 bg-slate-900/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
+          {value.length} / {maxLength}
+        </div>
+      )}
     </div>
   );
 };
