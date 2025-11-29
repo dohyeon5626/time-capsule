@@ -18,6 +18,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import Toast from '../components/Toast';
+import Loading from '../components/Loading';
 import { getCapsuleRequest } from '../etc/api';
 import {
   calculateTimeLeft,
@@ -35,10 +36,12 @@ const View = () => {
   const [forceUnlock, setForceUnlock] = useState(false);
   const [unlockError, setUnlockError] = useState('');
   const [isDecrypting, setIsDecrypting] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
+    setLoading(true);
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
     if (!id) {
@@ -51,6 +54,7 @@ const View = () => {
         const data = await getCapsuleRequest(id.trim());
         if (data) {
           setViewCapsuleData({ id: id, ...data });
+          setLoading(false);
         } else {
           navigate('/', {
             state: { message: '해당 코드를 가진 캡슐을 찾을 수 없습니다.' },
@@ -72,7 +76,7 @@ const View = () => {
     }
   }, [viewCapsuleData]);
 
-  if (!viewCapsuleData) return null;
+  // if (!viewCapsuleData) return null;
 
   const handleUnlock = () => {
     if (viewUnlockPassword === viewCapsuleData.passwordKey) {
@@ -119,7 +123,6 @@ const View = () => {
           setToastMessage('이미지가 저장되었습니다.');
         })
         .catch((err) => {
-          console.error(err);
           setToastMessage('이미지 저장에 실패했습니다.');
         });
     };
@@ -133,6 +136,10 @@ const View = () => {
       capture(element);
     }
   };
+  
+  if (loading) {
+    return <Loading></Loading>;
+  }
 
   const isOpen = new Date() >= new Date(viewCapsuleData.openDate) || forceUnlock;
   const needsPassword = viewCapsuleData.passwordKey && !isUnlocked;

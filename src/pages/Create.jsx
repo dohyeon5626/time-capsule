@@ -22,6 +22,7 @@ import AutoTextArea from '../components/AutoTextArea';
 import CustomDatePicker from '../components/CustomDatePicker';
 import InputGroup from '../components/InputGroup';
 import Toast from '../components/Toast';
+import Loading from '../components/Loading';
 import { createCapsuleRequest } from '../etc/api';
 import { formatPhoneNumber, isValidPhoneNumber } from '../etc/helpers';
 
@@ -37,6 +38,7 @@ const Create = () => {
   });
   const [errors, setErrors] = useState({});
   const [recipients, setRecipients] = useState([{ name: '', phone: '' }]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRecipientChange = (index, field, value) => {
@@ -179,6 +181,7 @@ const Create = () => {
     if (!validateForm()) {
       return;
     }
+    setLoading(true);
     const validRecipients = recipients.filter(
       (r) => r.name.trim() && r.phone.trim()
     );
@@ -199,8 +202,14 @@ const Create = () => {
     } catch (error) {
       console.error('Error:', error);
       setToastMessage('저장에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  if(loading) {
+    return <Loading></Loading>
+  }
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-white flex flex-col font-sans">
