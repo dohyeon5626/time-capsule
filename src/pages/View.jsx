@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import CryptoJS from 'crypto-js';
 import Toast from '../components/Toast';
 import Loading from '../components/Loading';
 import { getCapsuleRequest } from '../etc/api';
@@ -29,6 +30,8 @@ import {
 const View = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [viewCapsuleData, setViewCapsuleData] = useState(null);
+  const [message, setMessage] = useState('');
+
   const [timeLeft, setTimeLeft] = useState(0);
   const [viewUnlockPassword, setViewUnlockPassword] = useState('');
   const [showViewPassword, setShowViewPassword] = useState(false);
@@ -54,6 +57,7 @@ const View = () => {
         const data = await getCapsuleRequest(id.trim());
         if (data) {
           setViewCapsuleData({ id: id, ...data });
+          if (!data.usePasswordKey) setMessage(data.message);
           setLoading(false);
         } else {
           navigate('/', {
@@ -76,7 +80,10 @@ const View = () => {
   }, [viewCapsuleData]);
 
   const handleUnlock = () => {
-    if (viewUnlockPassword === viewCapsuleData.passwordKey) {
+    const resultMessage = CryptoJS.AES.decrypt(viewCapsuleData.message, viewUnlockPassword).toString(CryptoJS.enc.Utf8);
+
+    if (resultMessage.startsWith('MSG_')) {
+      setMessage(resultMessage.substring(4));
       setIsDecrypting(true);
       setTimeout(() => {
         setIsDecrypting(false);
@@ -139,7 +146,7 @@ const View = () => {
   }
 
   const isOpen = new Date() >= new Date(viewCapsuleData.openDate) || forceUnlock;
-  const needsPassword = viewCapsuleData.passwordKey && !isUnlocked;
+  const needsPassword = viewCapsuleData.usePasswordKey && !isUnlocked;
 
   if (!isOpen) {
     return (
@@ -304,7 +311,7 @@ const View = () => {
 
         <div className="mb-8 relative">
           <p className="whitespace-pre-wrap leading-loose text-slate-100 text-sm font-light relative z-10">
-            {viewCapsuleData.message}
+            {message}
           </p>
         </div>
 

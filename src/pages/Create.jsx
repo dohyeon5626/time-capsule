@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import CryptoJS from 'crypto-js';
 import AutoTextArea from '../components/AutoTextArea';
 import CustomDatePicker from '../components/CustomDatePicker';
 import InputGroup from '../components/InputGroup';
@@ -187,9 +188,9 @@ const Create = () => {
         recipients: validRecipients,
         from: formData.from,
         senderPhone: formData.senderPhone,
-        message: formData.message,
+        message: formData.passwordKey ? CryptoJS.AES.encrypt("MSG_" + formData.message, formData.passwordKey).toString() : formData.message,
         openDate: formData.openDate,
-        passwordKey: formData.passwordKey,
+        usePasswordKey: Boolean(formData.passwordKey),
       });
       navigate('/complete', {
         replace: true,
@@ -506,9 +507,8 @@ const Create = () => {
               <div className="flex items-start gap-2">
                 <Lock className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  암호키는 <strong>서버에 저장되지 않습니다</strong>. 입력하신
-                  키로 메시지가 암호화되어 저장되므로, 오직 키를 가진 사람만
-                  메시지를 볼 수 있습니다. (키 분실 시 복구 불가)
+                  암호키는 <strong>서버에 저장되지 않습니다</strong>.
+                  입력하신 키로 메시지가 암호화되어 저장되므로, 오직 키를 가진 사람만 메시지를 볼 수 있습니다. (키 분실 시 복구 불가)
                 </p>
               </div>
             </div>

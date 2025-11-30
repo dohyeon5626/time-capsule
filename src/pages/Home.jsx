@@ -196,7 +196,7 @@ const Home = () => {
                     철저한 보안 암호화
                   </div>
                   <p className="text-slate-400 text-xs leading-relaxed">
-                    암호키 설정 시 <strong>AES256 알고리즘</strong>이 적용되어
+                    암호키 설정 시 <strong>AES 알고리즘</strong>이 적용되어
                     사용자가 설정한 <strong>암호키</strong> 없이는 복호화가
                     불가능합니다.
                     <br />
