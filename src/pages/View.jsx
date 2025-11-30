@@ -61,7 +61,6 @@ const View = () => {
           });
         }
       } catch (error) {
-        console.error('Error:', error);
         navigate('/', { state: { message: '조회 중 오류가 발생했습니다.' } });
       }
     })();
@@ -75,8 +74,6 @@ const View = () => {
       return () => clearInterval(timer);
     }
   }, [viewCapsuleData]);
-
-  // if (!viewCapsuleData) return null;
 
   const handleUnlock = () => {
     if (viewUnlockPassword === viewCapsuleData.passwordKey) {
@@ -136,7 +133,7 @@ const View = () => {
       capture(element);
     }
   };
-  
+
   if (loading) {
     return <Loading></Loading>;
   }
@@ -299,42 +296,10 @@ const View = () => {
         id="capture-target"
         className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-3xl p-8 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-700"
       >
-        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500"></div>
-
-        <div className="flex justify-between items-end mb-8 border-b border-slate-700/50 pb-6">
-          <div>
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest block mb-2">
-              To
-            </span>
-            <div className="flex flex-col gap-1.5">
-              {viewCapsuleData.recipients?.length > 0 ? (
-                viewCapsuleData.recipients.map((r, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center border border-slate-600">
-                      <User className="w-4 h-4 text-slate-300" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-slate-200 block">
-                        {r.name}
-                      </span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <span className="text-xl font-bold text-slate-400">나에게</span>
-              )}
-            </div>
-          </div>
-          <div className="text-right">
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest block mb-2">
-              From
-            </span>
-            <div className="inline-flex items-center bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700/50">
-              <span className="text-sm text-white font-bold">
-                {viewCapsuleData.from}
-              </span>
-            </div>
-          </div>
+        <div className="flex justify-between items-end mb-8 border-b border-slate-700/50 pb-4">
+          <span className="text-left text-[10px] text-slate-500 font-bold uppercase tracking-widest block">
+            From {viewCapsuleData.from}
+          </span>
         </div>
 
         <div className="mb-8 relative">
@@ -343,8 +308,8 @@ const View = () => {
           </p>
         </div>
 
-        <div className="flex items-end justify-between pt-4 border-t border-slate-700/50 mb-6">
-          <div className="flex flex-col gap-1">
+        <div className="flex items-end justify-between pt-4 border-t border-slate-700/50 flex-wrap">
+          <div className="flex flex-col">
             <div className="flex items-center text-xs text-slate-500">
               <CalendarIcon className="w-3.5 h-3.5 mr-1.5" />
               작성일: {formatDate(new Date(viewCapsuleData.createdAt))}
@@ -364,7 +329,7 @@ const View = () => {
               copyToClipboard(viewCapsuleData.message);
               setToastMessage('내용이 복사되었습니다.');
             }}
-            className="text-[10px] flex items-center gap-1 text-slate-400 hover:text-blue-400 transition-colors bg-slate-800 px-2 py-1 rounded h-fit"
+            className="text-[10px] flex items-center gap-1 text-slate-400 hover:text-blue-400 transition-colors bg-slate-800 rounded h-fit mt-4"
           >
             <Copy className="w-3 h-3" /> 내용 복사
           </button>

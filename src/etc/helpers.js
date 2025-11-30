@@ -57,8 +57,6 @@ export const copyToClipboard = async (text) => {
   try {
     await navigator.clipboard.writeText(text);
   } catch (err) {
-    console.error('클립보드 복사에 실패했습니다.', err);
-    // Fallback for older browsers
     const textArea = document.createElement('textarea');
     textArea.value = text;
     textArea.style.position = 'fixed';
@@ -66,11 +64,7 @@ export const copyToClipboard = async (text) => {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    try {
-      document.execCommand('copy');
-    } catch (fallbackErr) {
-      console.error('Fallback 복사에 실패했습니다.', fallbackErr);
-    }
+    document.execCommand('copy');
     document.body.removeChild(textArea);
   }
 };

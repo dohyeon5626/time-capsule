@@ -96,8 +96,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/create" element={<Create />} />
-          <Route path="/success" element={<Success />} />
+          <Route path="/new" element={<Create />} />
+          <Route path="/complete" element={<Success />} />
           <Route path="/view" element={<View />} />
           <Route path="*" element={<Home />} />
         </Routes>

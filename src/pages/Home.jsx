@@ -152,7 +152,7 @@ const Home = () => {
 
         <div className="mb-12 flex flex-col gap-3">
           <button
-            onClick={() => navigate('/create')}
+            onClick={() => navigate('/new')}
             className="w-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_10px_20px_-10px_rgba(37,99,235,0.4)] text-lg flex items-center justify-center gap-3 group relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>

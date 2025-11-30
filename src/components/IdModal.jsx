@@ -36,6 +36,9 @@ const IdModal = ({
             setManualId(e.target.value);
             setManualIdError('');
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') fetchCapsule(manualId)
+          }}
           placeholder="전달받은 코드를 입력하세요"
           className={`w-full bg-[#0f172a] border ${
             manualIdError

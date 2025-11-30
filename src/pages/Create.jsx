@@ -75,16 +75,12 @@ const Create = () => {
       case '1year':
         date.setFullYear(date.getFullYear() + 1);
         break;
-      case 'christmas': {
-        const currentYear = date.getFullYear();
-        const christmas = new Date(currentYear, 11, 25);
-        if (date > christmas) {
-          date.setFullYear(currentYear + 1, 11, 25);
-        } else {
-          date.setFullYear(currentYear, 11, 25);
-        }
+      case 'new-year':
+        date.setFullYear(date.getFullYear() + 1, 0, 1);
         break;
-      }
+      case 'christmas':
+        date.setFullYear(date.getFullYear() + 1, 11, 25);
+        break;
       default:
         return;
     }
@@ -195,15 +191,13 @@ const Create = () => {
         openDate: formData.openDate,
         passwordKey: formData.passwordKey,
       });
-      navigate('/success', {
+      navigate('/complete', {
         replace: true,
         state: { formData, recipients, createdCapsuleId },
       });
     } catch (error) {
-      console.error('Error:', error);
-      setToastMessage('저장에 실패했습니다. 다시 시도해주세요.');
-    } finally {
       setLoading(false);
+      setToastMessage('저장에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
@@ -418,10 +412,16 @@ const Create = () => {
                   +1년
                 </button>
                 <button
+                  onClick={() => setDateOffset('new-year')}
+                  className="shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs rounded-lg transition-colors"
+                >
+                  {new Date().getFullYear() + 1}년 새해 ☀️
+                </button>
+                <button
                   onClick={() => setDateOffset('christmas')}
                   className="shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs rounded-lg transition-colors"
                 >
-                  다가오는 크리스마스 🎄
+                  {new Date().getFullYear() + 1}년 크리스마스 🎄
                 </button>
               </div>
             </InputGroup>
