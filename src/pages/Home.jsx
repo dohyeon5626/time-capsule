@@ -17,6 +17,7 @@ import GuideModal from '../components/GuideModal';
 import IdModal from '../components/IdModal';
 import Toast from '../components/Toast';
 import { copyToClipboard } from '../etc/helpers';
+import { getStatsRequest } from '../etc/api';
 
 const Home = () => {
   const [isIdModalOpen, setIsIdModalOpen] = useState(false);
@@ -24,6 +25,8 @@ const Home = () => {
   const [manualId, setManualId] = useState('');
   const [manualIdError, setManualIdError] = useState('');
   const [toastMessage, setToastMessage] = useState('');
+  const [waitingCount, setWaitingCount] = useState(0);
+  const [sentCount, setSentCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -34,6 +37,14 @@ const Home = () => {
       navigate(location.pathname, { replace: true });
     }
   }, [location, navigate]);
+
+  useEffect(() => {
+    getStatsRequest()
+      .then(data => {
+        setWaitingCount(data.waiting);
+        setSentCount(data.sent);
+      });
+  }, []);
 
   const fetchCapsule = (id) => {
     if (!id || typeof id !== 'string' || id.trim() === '') {
@@ -118,23 +129,21 @@ const Home = () => {
               DIGITAL TIME CAPSULE
             </span>
           </div>
-          <div className="inline-flex items-center gap-3 px-3 py-1 bg-slate-800/50 border border-slate-700/50 rounded-full w-fit">
-            <div className="flex items-center gap-1 text-[10px] text-slate-400">
+          { waitingCount != 0 || sentCount != 0 ? <div className="inline-flex items-center gap-3 px-3 py-1 bg-slate-800/50 border border-slate-700/50 rounded-full w-fit">
+            { waitingCount != 0 ? <div className="flex items-center gap-1 text-[10px] text-slate-400">
               <Hourglass className="w-3 h-3 text-amber-400" />
               <span>
-                Waiting: <strong className="text-white">{0}</strong>
+                Waiting: <strong className="text-white">{waitingCount}</strong>
               </span>
-              {/* 추후에 수정 예정 */}
-            </div>
-            <div className="w-px h-3 bg-slate-700"></div>
-            <div className="flex items-center gap-1 text-[10px] text-slate-400">
+            </div> : null }
+            { waitingCount != 0 && sentCount != 0 ? <div className="w-px h-3 bg-slate-700"></div> : null}
+            { sentCount != 0 ? <div className="flex items-center gap-1 text-[10px] text-slate-400">
               <Rocket className="w-3 h-3 text-emerald-400" />
               <span>
-                Sent: <strong className="text-white">{0}</strong>
+                Sent: <strong className="text-white">{sentCount}</strong>
               </span>
-              {/* 추후에 수정 예정 */}
-            </div>
-          </div>
+            </div> : null }
+          </div> : null }
         </div>
 
         <h1 className="text-4xl font-extrabold leading-tight mb-4 text-slate-50">
