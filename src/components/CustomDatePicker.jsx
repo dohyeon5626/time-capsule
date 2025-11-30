@@ -11,6 +11,7 @@ import { formatDateSimple } from '../etc/helpers';
 const CustomDatePicker = ({ value, onChange, error, id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [viewDate, setViewDate] = useState(value ? new Date(value) : new Date());
+  const [selectedDate, setSelectedDate] = useState(value ? new Date(value) : new Date());
   const getInitialHour = () => {
     if (value) return new Date(value).getHours();
     const now = new Date();
@@ -32,19 +33,13 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
 
   const handleConfirm = () => {
     const selected = new Date(
-      viewDate.getFullYear(),
-      viewDate.getMonth(),
-      viewDate.getDate(),
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
       selectedHour,
       0,
       0
     );
-    const today = new Date();
-
-    if (selected < today) {
-      alert('미래 날짜를 선택해주세요.');
-      return;
-    }
 
     const offsetDate = new Date(
       selected.getTime() - selected.getTimezoneOffset() * 60000
@@ -56,7 +51,19 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
   const handleDateClick = (day) => {
     const newDate = new Date(viewDate);
     newDate.setDate(day);
+    newDate.setHours(selectedHour);
     setViewDate(newDate);
+    setSelectedDate(newDate);
+
+    const now = new Date();
+    const maxTime = new Date();
+    maxTime.setFullYear(now.getFullYear() + 10);
+
+    if (newDate <= now) {
+      setSelectedHour(now.getHours() + 1);
+    } else if (newDate >= maxTime) {
+      setSelectedHour(now.getHours());
+    }
   };
 
   const changeMonth = (delta) => {
@@ -76,6 +83,11 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
       now.getMonth(),
       now.getDate()
     ).getTime();
+    const maxTime = new Date(
+      now.getFullYear() + 10,
+      now.getMonth(),
+      now.getDate()
+    ).getTime();
 
     const days = [];
     for (let i = 0; i < firstDay; i++) {
@@ -85,7 +97,8 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
       const d = new Date(year, month, i);
       const dTime = d.getTime();
       const isPast = dTime < todayStart;
-      const isSelected = viewDate.getDate() === i;
+      const isOverMaxTime = dTime > maxTime;
+      const isSelected = selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year;
       const isToday = now.toDateString() === d.toDateString();
 
       days.push(
@@ -93,13 +106,13 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
           key={i}
           onClick={(e) => {
             e.stopPropagation();
-            if (!isPast) handleDateClick(i);
+            if (!isPast && !isOverMaxTime) handleDateClick(i);
           }}
-          disabled={isPast}
+          disabled={isPast || isOverMaxTime}
           className={`h-9 w-9 rounded-lg flex items-center justify-center text-sm transition-all
             ${isSelected ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-900/50' : ''}
             ${isToday && !isSelected ? 'border border-blue-500 text-blue-400' : ''}
-            ${isPast ? 'text-slate-700 cursor-not-allowed' : 'hover:bg-slate-800 text-slate-300'}
+            ${isPast || isOverMaxTime ? 'text-slate-700 cursor-not-allowed' : 'hover:bg-slate-800 text-slate-300'}
           `}
         >
           {i}
@@ -112,19 +125,36 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
   const renderTimeSlots = () => {
     const slots = [];
     const now = new Date();
+    const maxTime = new Date();
+    maxTime.setFullYear(now.getFullYear() + 10);
+
     const isToday = viewDate.toDateString() === now.toDateString();
+    const isMaxDate = viewDate.toDateString() === maxTime.toDateString();
     const currentHour = now.getHours();
+
+    const viewDateOnly = new Date(viewDate);
+    const nowOnly = new Date(now);
+    const maxTimeOnly = new Date(maxTime);
+    viewDateOnly.setHours(0, 0, 0, 0);
+    nowOnly.setHours(0, 0, 0, 0);
+    maxTimeOnly.setHours(0, 0, 0, 0);
+
+    if (nowOnly.getTime() > viewDateOnly.getTime() || viewDateOnly.getTime() > maxTimeOnly.getTime()) {
+      return null;
+    }
 
     for (let i = 0; i < 24; i++) {
       const isSelected = selectedHour === i;
       const isPastHour = isToday && i <= currentHour;
-      if (isPastHour) continue;
+      const isOverMaxTime = isMaxDate && i > currentHour;
+      if (isPastHour || isOverMaxTime) continue;
 
       slots.push(
         <button
           key={i}
           onClick={(e) => {
             e.stopPropagation();
+            setSelectedDate(viewDate);
             setSelectedHour(i);
           }}
           className={`flex-shrink-0 px-3 py-2 rounded-lg text-xs font-medium border transition-all
@@ -137,13 +167,6 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
         >
           {String(i).padStart(2, '0')}:00
         </button>
-      );
-    }
-    if (slots.length === 0 && isToday) {
-      return (
-        <div className="text-xs text-slate-500 w-full text-center py-2">
-          오늘 가능한 시간이 없습니다. 미래 날짜를 선택해주세요.
-        </div>
       );
     }
     return slots;
@@ -230,7 +253,7 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
             </div>
             <div className="p-4 border-t border-slate-700/50 flex justify-between items-center bg-slate-900/30">
               <div className="text-xs text-slate-400">
-                {viewDate.getMonth() + 1}월 {viewDate.getDate()}일{' '}
+                {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일{' '}
                 {selectedHour}시
               </div>
               <div className="flex gap-2">
