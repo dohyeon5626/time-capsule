@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   AlertCircle,
   ArrowRight,
@@ -25,7 +25,7 @@ import InputGroup from '../components/InputGroup';
 import Toast from '../components/Toast';
 import Loading from '../components/Loading';
 import { createCapsuleRequest } from '../etc/api';
-import { formatPhoneNumber, isValidPhoneNumber } from '../etc/helpers';
+import { formatPhoneNumber, isValidPhoneNumber, reSizeImageUrl, fileToDataURL, b64ToBlob } from '../etc/helpers';
 
 const Create = () => {
   const [toastMessage, setToastMessage] = useState('');
@@ -37,10 +37,33 @@ const Create = () => {
     openDate: '',
     passwordKey: '',
   });
+  const fileInputRef = useRef(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+  const [uploadedImageFile, setUploadedImageFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [recipients, setRecipients] = useState([{ name: '', phone: '' }]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (uploadedImageUrl) {
+      setUploadedImageUrl(null);
+      return;
+    }
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size < 40960) {
+        setUploadedImageUrl(await fileToDataURL(file));
+        setUploadedImageFile(file);
+      } else {
+        setUploadedImageUrl(await reSizeImageUrl(file));
+      }
+    }
+  }
 
   const handleRecipientChange = (index, field, value) => {
     const newRecipients = [...recipients];
@@ -183,15 +206,28 @@ const Create = () => {
       (r) => r.name.trim() && r.phone.trim()
     );
     try {
-      const createdCapsuleId = await createCapsuleRequest({
-        type: 'capsule',
-        recipients: validRecipients,
-        from: formData.from,
-        senderPhone: formData.senderPhone,
-        message: formData.passwordKey ? CryptoJS.AES.encrypt("MSG_" + formData.message, formData.passwordKey).toString() : formData.message,
-        openDate: formData.openDate,
-        usePasswordKey: Boolean(formData.passwordKey),
-      });
+      const reqFormData = new FormData();
+      reqFormData.append("recipients", validRecipients);
+      reqFormData.append("from", formData.from);
+      reqFormData.append("senderPhone", formData.senderPhone);
+      reqFormData.append("message", formData.message);
+      reqFormData.append("openDate", formData.openDate);
+      reqFormData.append("usePasswordKey", Boolean(formData.passwordKey));
+      if (uploadedImageUrl) {
+        reqFormData.append('originalHeader', uploadedImageUrl.split(',')[0]);
+        if(uploadedImageFile) {
+          reqFormData.append("image", uploadedImageFile);
+        } else {
+          if (formData.passwordKey) {
+            const imageCiphertext = CryptoJS.AES.encrypt(uploadedImageUrl.split(',')[1], formData.passwordKey).toString();
+            reqFormData.append('image', b64ToBlob(imageCiphertext), 'encrypted_original.dat');
+          } else {
+            reqFormData.append('image', b64ToBlob(uploadedImageUrl.split(',')[1]), 'resized_image.jpeg');
+          }
+        }
+      }
+
+      const createdCapsuleId = await createCapsuleRequest(reqFormData);
       navigate('/complete', {
         replace: true,
         state: { formData, recipients, createdCapsuleId },
@@ -453,15 +489,25 @@ const Create = () => {
             />
           </InputGroup>
 
-          <div className="bg-[#1e293b]/50 border border-dashed border-slate-700 hover:border-slate-500 rounded-xl p-6 flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
-            <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-slate-700 transition-colors">
-              <ImageIcon className="w-6 h-6 text-slate-400 group-hover:text-blue-400" />
+          {uploadedImageUrl ? 
+            <div onClick={handleClick} className="bg-[#1e293b]/50 border border-slate-700 hover:border-slate-500 rounded-xl flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
+              <img 
+                src={uploadedImageUrl} 
+                alt="File Preview" 
+                className="w-full h-full object-contain rounded-xl"
+              />
+            </div>:
+            <div onClick={handleClick} className="bg-[#1e293b]/50 border border-dashed border-slate-700 hover:border-slate-500 rounded-xl p-6 flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
+              <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-slate-700 transition-colors">
+                <ImageIcon className="w-6 h-6 text-slate-400 group-hover:text-blue-400" />
+              </div>
+              <h4 className="text-slate-300 text-sm font-semibold mb-1">
+                사진 추가 (선택)
+              </h4>
+              <p className="text-slate-500 text-xs">최대 1장까지 업로드 가능합니다.</p>
             </div>
-            <h4 className="text-slate-300 text-sm font-semibold mb-1">
-              사진 추가 (선택)
-            </h4>
-            <p className="text-slate-500 text-xs">최대 3장까지 업로드 가능합니다.</p>
-          </div>
+          }
+          <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
 
           <InputGroup
             label={

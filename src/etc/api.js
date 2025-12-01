@@ -1,19 +1,7 @@
 export const createCapsuleRequest = async (data) => {
   return new Promise((resolve) => {
-    setTimeout(() => {
-      const id = Math.random().toString(36).substring(2, 11);
-      const capsule = {
-        ...data,
-        id,
-        createdAt: new Date().toISOString(),
-      };
-
-      const capsules = JSON.parse(localStorage.getItem('capsules') || '[]');
-      capsules.push(capsule);
-      localStorage.setItem('capsules', JSON.stringify(capsules));
-
-      resolve(id);
-    }, 800);
+    // TODO
+    resolve('test-id');
   });
 };
 

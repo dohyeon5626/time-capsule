@@ -68,3 +68,80 @@ export const copyToClipboard = async (text) => {
     document.body.removeChild(textArea);
   }
 };
+
+export const reSizeImageUrl = (file) => {
+    const MAX_DIMENSION = 400;
+    const JPEG_QUALITY = 0.8;
+
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+                    if (width > height) {
+                        height *= MAX_DIMENSION / width;
+                        width = MAX_DIMENSION;
+                    } else {
+                        width *= MAX_DIMENSION / height;
+                        width = MAX_DIMENSION;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = "#0f172a"; 
+                ctx.fillRect(0, 0, width, height);
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const base64String = canvas.toDataURL('image/jpeg', JPEG_QUALITY); 
+                
+                resolve(base64String);
+            };
+        };
+
+        reader.readAsDataURL(file);
+    });
+};
+
+export const fileToDataURL = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            resolve(event.target.result);
+        };
+        reader.readAsDataURL(file);
+    });
+};
+
+export const b64ToBlob = (b64Data, contentType = 'application/octet-stream') => {
+    const byteString = atob(b64Data);
+    
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+        int8Array[i] = byteString.charCodeAt(i);
+    }
+    
+    return new Blob([int8Array], { type: contentType });
+}
+
+export const logFormDataEntries = (formData) => { // 테스트용
+    console.log("--- 📥 FormData 내용 시작 📥 ---");
+    for (const [key, value] of formData.entries()) {
+        if (value instanceof File || value instanceof Blob) {
+            console.log(`🔑 ${key}: [File/Blob] Name: ${value.name || 'N/A'}, Size: ${(value.size / 1024).toFixed(2)} KB, Type: ${value.type}`);
+        } else {
+            console.log(`🔑 ${key}: ${String(value)}`);
+        }
+    }
+    console.log("--- 📤 FormData 내용 끝 📤 ---");
+}
