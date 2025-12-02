@@ -90,7 +90,7 @@ export const reSizeImageUrl = (file) => {
                         width = MAX_DIMENSION;
                     } else {
                         width *= MAX_DIMENSION / height;
-                        width = MAX_DIMENSION;
+                        height = MAX_DIMENSION;
                     }
                 }
 
