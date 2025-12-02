@@ -70,8 +70,8 @@ export const copyToClipboard = async (text) => {
 };
 
 export const reSizeImageUrl = (file) => {
-    const MAX_DIMENSION = 400;
-    const JPEG_QUALITY = 0.95;
+    const MAX_DIMENSION = 1000;
+    const JPEG_QUALITY = 0.7;
 
     return new Promise((resolve, reject) => {
         const reader = new FileReader();

@@ -198,9 +198,9 @@ const Home = () => {
                   <p className="text-slate-400 text-xs leading-relaxed">
                     암호키 설정 시 <strong>AES 알고리즘</strong>이 적용되어
                     사용자가 설정한 <strong>암호키</strong> 없이는 복호화가
-                    불가능합니다.
-                    <br />
-                    개발자도 볼 수 없는 완벽한 보안을 제공합니다.
+                    불가능합니다. (메시지, 사진 암호화)<br />
+                    서버에 암호키를 저장하지 않기 때문에, <br/>
+                    <strong className="text-emerald-400">키를 분실하시면 복구가 불가능합니다.</strong> 안전하게 보관해 주세요.
                   </p>
                 </div>
               </div>

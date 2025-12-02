@@ -553,8 +553,9 @@ const Create = () => {
               <div className="flex items-start gap-2">
                 <Lock className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  암호키는 <strong>서버에 저장되지 않습니다</strong>.
-                  입력하신 키로 메시지가 암호화되어 저장되므로, 오직 키를 가진 사람만 메시지를 볼 수 있습니다. (키 분실 시 복구 불가)
+                  입력하신 키로 메시지 및 사진이 암호화되어 저장되므로,<br/> 오직 키를 가진 사람만 메시지 및 사진을 볼 수 있습니다.<br/>
+                  서버에 암호키를 저장하지 않기 때문에, <br/>
+                  <strong className="text-emerald-400">키를 분실하시면 복구가 불가능합니다.</strong> 안전하게 보관해 주세요.
                 </p>
               </div>
             </div>
