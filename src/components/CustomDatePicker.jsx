@@ -112,7 +112,7 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
           className={`h-9 w-9 rounded-lg flex items-center justify-center text-sm transition-all
             ${isSelected ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-900/50' : ''}
             ${isToday && !isSelected ? 'border border-blue-500 text-blue-400' : ''}
-            ${isPast || isOverMaxTime ? 'text-slate-700 cursor-not-allowed' : 'hover:bg-slate-800 text-slate-300'}
+            ${isPast || isOverMaxTime ? 'text-slate-700 cursor-not-allowed' : 'text-slate-300'}
           `}
         >
           {i}
