@@ -99,7 +99,7 @@ const View = () => {
     if (!viewCapsuleData) return;
     const shareData = {
       title: 'Time Capsule',
-      text: `${viewCapsuleData.from}님의 타임캡슐을 확인해보세요.`,
+      text: `${viewCapsuleData.senderName}님의 타임캡슐을 확인해보세요.`,
       url: window.location.href,
     };
     if (navigator.share) {
@@ -305,7 +305,7 @@ const View = () => {
       >
         <div className="flex justify-between items-end mb-8 border-b border-slate-700/50 pb-4">
           <span className="text-left text-[10px] text-slate-500 font-bold uppercase tracking-widest block">
-            From {viewCapsuleData.from}
+            From {viewCapsuleData.senderName}
           </span>
         </div>
 

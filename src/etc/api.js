@@ -14,12 +14,11 @@ export const createCapsuleRequest = async (formData) => {
 };
 
 export const getCapsuleRequest = async (id) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const capsules = JSON.parse(localStorage.getItem('capsules') || '[]');
-      const found = capsules.find((c) => c.id === id);
-      resolve(found || null);
-    }, 500);
+  return new Promise((resolve, reject) => {
+    baseAxios().get(`/time-capsule/subscription/${id}`)
+      .then(it => it.data)
+      .then(it => resolve(it))
+      .catch(reject);
   });
 };
 
