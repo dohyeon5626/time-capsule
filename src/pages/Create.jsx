@@ -207,8 +207,8 @@ const Create = () => {
     );
     try {
       const reqFormData = new FormData();
-      reqFormData.append("recipients", validRecipients);
-      reqFormData.append("from", formData.from);
+      reqFormData.append("recipients", JSON.stringify(validRecipients));
+      reqFormData.append("senderName", formData.from);
       reqFormData.append("senderPhone", formData.senderPhone);
       reqFormData.append("message", formData.message);
       reqFormData.append("openDate", formData.openDate);

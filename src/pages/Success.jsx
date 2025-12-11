@@ -80,7 +80,7 @@ const Success = () => {
         <div className="text-xs text-slate-500 mb-2 text-left font-medium uppercase tracking-wider">
           캡슐 코드
         </div>
-        <div className="font-mono text-xl font-bold text-blue-400 break-all">
+        <div className="font-mono text-l font-bold text-blue-400 break-all">
           {createdCapsuleId}
         </div>
         <div className="absolute top-1/2 -translate-y-1/2 right-4 p-2 bg-slate-800 rounded-lg group-hover:bg-blue-600 group-hover:text-white text-slate-500 transition-colors">

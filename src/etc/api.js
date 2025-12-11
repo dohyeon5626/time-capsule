@@ -1,7 +1,15 @@
-export const createCapsuleRequest = async (data) => {
-  return new Promise((resolve) => {
-    // TODO
-    resolve('test-id');
+import axios from 'axios';
+
+const baseAxios = () => axios.create({
+    baseURL: 'https://api.dohyeon5626.com'
+});
+
+export const createCapsuleRequest = async (formData) => {
+  return new Promise((resolve, reject) => {
+    baseAxios().post(`/time-capsule/subscription`, formData)
+      .then(it => it.data)
+      .then(it => resolve(it.id))
+      .catch(reject);
   });
 };
 
