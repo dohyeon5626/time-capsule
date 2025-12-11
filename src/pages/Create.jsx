@@ -210,7 +210,8 @@ const Create = () => {
       reqFormData.append("recipients", JSON.stringify(validRecipients));
       reqFormData.append("senderName", formData.from);
       reqFormData.append("senderPhone", formData.senderPhone);
-      reqFormData.append("message", formData.message);
+      if (formData.passwordKey) reqFormData.append("message", CryptoJS.AES.encrypt('MSG_' + formData.message, formData.passwordKey).toString());
+      else reqFormData.append("message", formData.message);
       reqFormData.append("openDate", formData.openDate);
       reqFormData.append("usePasswordKey", Boolean(formData.passwordKey));
       if (uploadedImageUrl) {
