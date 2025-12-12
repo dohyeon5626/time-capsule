@@ -25,14 +25,14 @@ import InputGroup from '../components/InputGroup';
 import Toast from '../components/Toast';
 import Loading from '../components/Loading';
 import { createCapsuleRequest } from '../etc/api';
-import { formatPhoneNumber, isValidPhoneNumber, reSizeImageUrl, fileToDataURL, b64ToBlob } from '../etc/helpers';
+import { reSizeImageUrl, fileToDataURL, b64ToBlob } from '../etc/helpers';
 
 const Create = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     from: '',
-    senderPhone: '',
+    senderEmail: '',
     message: '',
     openDate: '',
     passwordKey: '',
@@ -41,9 +41,14 @@ const Create = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [uploadedImageFile, setUploadedImageFile] = useState(null);
   const [errors, setErrors] = useState({});
-  const [recipients, setRecipients] = useState([{ name: '', phone: '' }]);
+  const [recipients, setRecipients] = useState([{ name: '', email: '' }]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleClick = () => {
     if (uploadedImageUrl) {
@@ -67,11 +72,7 @@ const Create = () => {
 
   const handleRecipientChange = (index, field, value) => {
     const newRecipients = [...recipients];
-    if (field === 'phone') {
-      newRecipients[index][field] = formatPhoneNumber(value);
-    } else {
-      newRecipients[index][field] = value;
-    }
+    newRecipients[index][field] = value;
     setRecipients(newRecipients);
     if (errors[`recipient_${index}_${field}`]) {
       const newErrors = { ...errors };
@@ -81,7 +82,7 @@ const Create = () => {
   };
 
   const addRecipient = () =>
-    setRecipients([...recipients, { name: '', phone: '' }]);
+    setRecipients([...recipients, { name: '', email: '' }]);
 
   const removeRecipient = (index) => {
     if (recipients.length > 1) {
@@ -118,17 +119,17 @@ const Create = () => {
   };
 
   const handleSendToMe = () => {
-    if (!formData.from.trim() || !formData.senderPhone.trim()) {
-      setToastMessage('보내는 사람의 이름과 전화번호를 먼저 입력해주세요.');
+    if (!formData.from.trim() || !formData.senderEmail.trim()) {
+      setToastMessage('보내는 사람의 이름과 이메일을 먼저 입력해주세요.');
       return;
     }
     const newRecipients = [...recipients];
-    newRecipients[0] = { name: formData.from, phone: formData.senderPhone };
+    newRecipients[0] = { name: formData.from, email: formData.senderEmail };
     setRecipients(newRecipients);
     setErrors((prev) => {
       const newErr = { ...prev };
       delete newErr.recipient_0_name;
-      delete newErr.recipient_0_phone;
+      delete newErr.recipient_0_email;
       return newErr;
     });
   };
@@ -145,13 +146,13 @@ const Create = () => {
     if (!formData.from.trim())
       setError('from', '보내는 사람을 입력해주세요.', 'input-from');
 
-    if (!formData.senderPhone.trim())
-      setError('senderPhone', '전화번호를 입력해주세요.', 'input-senderPhone');
-    else if (!isValidPhoneNumber(formData.senderPhone))
+    if (!formData.senderEmail.trim())
+      setError('senderEmail', '이메일을 입력해주세요.', 'input-senderEmail');
+    else if (!isValidEmail(formData.senderEmail))
       setError(
-        'senderPhone',
-        '올바른 전화번호 형식이 아닙니다.',
-        'input-senderPhone'
+        'senderEmail',
+        '올바른 이메일 형식이 아닙니다.',
+        'input-senderEmail'
       );
 
     recipients.forEach((r, i) => {
@@ -162,17 +163,17 @@ const Create = () => {
           `input-recipient-${i}-name`
         );
 
-      if (!r.phone.trim())
+      if (!r.email.trim())
         setError(
-          `recipient_${i}_phone`,
-          '전화번호를 입력해주세요.',
-          `input-recipient-${i}-phone`
+          `recipient_${i}_email`,
+          '이메일을 입력해주세요.',
+          `input-recipient-${i}-email`
         );
-      else if (!isValidPhoneNumber(r.phone))
+      else if (!isValidEmail(r.email))
         setError(
-          `recipient_${i}_phone`,
-          '올바른 전화번호 형식이 아닙니다.',
-          `input-recipient-${i}-phone`
+          `recipient_${i}_email`,
+          '올바른 이메일 형식이 아닙니다.',
+          `input-recipient-${i}-email`
         );
     });
 
@@ -203,13 +204,13 @@ const Create = () => {
     }
     setLoading(true);
     const validRecipients = recipients.filter(
-      (r) => r.name.trim() && r.phone.trim()
+      (r) => r.name.trim() && r.email.trim()
     );
     try {
       const reqFormData = new FormData();
       reqFormData.append("recipients", JSON.stringify(validRecipients));
       reqFormData.append("senderName", formData.from);
-      reqFormData.append("senderPhone", formData.senderPhone);
+      reqFormData.append("senderEmail", formData.senderEmail);
       if (formData.passwordKey) reqFormData.append("message", CryptoJS.AES.encrypt('MSG_' + formData.message, formData.passwordKey).toString());
       else reqFormData.append("message", formData.message);
       reqFormData.append("openDate", formData.openDate + ':00');
@@ -293,34 +294,34 @@ const Create = () => {
               </div>
               <div className="col-span-3">
                 <input
-                  id="input-senderPhone"
-                  type="tel"
-                  value={formData.senderPhone}
+                  id="input-senderEmail"
+                  type="email"
+                  value={formData.senderEmail}
                   onChange={(e) => {
                     setFormData({
                       ...formData,
-                      senderPhone: formatPhoneNumber(e.target.value),
+                      senderEmail: e.target.value,
                     });
-                    if (errors.senderPhone)
-                      setErrors({ ...errors, senderPhone: null });
+                    if (errors.senderEmail)
+                      setErrors({ ...errors, senderEmail: null });
                   }}
                   className={`w-full bg-[#1e293b] border ${
-                    errors.senderPhone
+                    errors.senderEmail
                       ? 'border-rose-500 focus:border-rose-500'
                       : 'border-slate-700/50 focus:border-blue-500'
                   } rounded-xl p-3.5 text-white text-sm outline-none placeholder-slate-600 transition-all`}
-                  placeholder="010-0000-0000"
+                  placeholder="test@test.com"
                 />
               </div>
             </div>
-            {(errors.from || errors.senderPhone) && (
+            {(errors.from || errors.senderEmail) && (
               <p className="text-xs text-rose-500 flex items-center mt-1">
                 <AlertCircle className="w-3 h-3 mr-1" />
                 {errors.from
                   ? '보내는 사람을 입력해주세요.'
-                  : errors.senderPhone === '올바른 형식이 아닙니다.'
-                  ? '올바른 형식이 아닙니다.'
-                  : '전화번호를 입력해주세요.'}
+                  : errors.senderEmail === '올바른 이메일 형식이 아닙니다.'
+                  ? '올바른 이메일 형식이 아닙니다.'
+                  : '이메일을 입력해주세요.'}
               </p>
             )}
           </div>
@@ -370,18 +371,18 @@ const Create = () => {
                     </div>
                     <div className="col-span-3 relative">
                       <input
-                        id={`input-recipient-${index}-phone`}
-                        type="tel"
-                        value={recipient.phone}
+                        id={`input-recipient-${index}-email`}
+                        type="email"
+                        value={recipient.email}
                         onChange={(e) =>
-                          handleRecipientChange(index, 'phone', e.target.value)
+                          handleRecipientChange(index, 'email', e.target.value)
                         }
                         className={`w-full bg-[#1e293b] border ${
-                          errors[`recipient_${index}_phone`]
+                          errors[`recipient_${index}_email`]
                             ? 'border-rose-500 focus:border-rose-500'
                             : 'border-slate-700/50 focus:border-blue-500'
                         } rounded-xl p-3.5 text-white text-sm outline-none placeholder-slate-600 transition-all`}
-                        placeholder="010-0000-0000"
+                        placeholder="test@test.com"
                       />
                       {recipients.length > 1 && (
                         <button
@@ -394,15 +395,15 @@ const Create = () => {
                     </div>
                   </div>
                   {(errors[`recipient_${index}_name`] ||
-                    errors[`recipient_${index}_phone`]) && (
+                    errors[`recipient_${index}_email`]) && (
                     <p className="text-xs text-rose-500 flex items-center mt-1 ml-1">
                       <AlertCircle className="w-3 h-3 mr-1" />
                       {errors[`recipient_${index}_name`]
                         ? '받는 사람을 입력해주세요.'
-                        : errors[`recipient_${index}_phone`] ===
-                          '올바른 형식이 아닙니다.'
-                        ? '올바른 형식이 아닙니다.'
-                        : '전화번호를 입력해주세요.'}
+                        : errors[`recipient_${index}_email`] ===
+                          '올바른 이메일 형식이 아닙니다.'
+                        ? '올바른 이메일 형식이 아닙니다.'
+                        : '이메일을 입력해주세요.'}
                     </p>
                   )}
                 </div>
@@ -412,10 +413,10 @@ const Create = () => {
               <div className="flex items-start gap-2">
                 <Info className="w-3.5 h-3.5 text-blue-500 mt-0.5 shrink-0" />
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  개봉 날짜가 되면 입력하신 번호로{' '}
-                  <strong>알림톡이 발송됩니다.</strong>
+                  개봉 날짜가 되면 입력하신 이메일로{' '}
+                  <strong>알림이 발송됩니다.</strong>
                   <br />
-                  (번호는 알림 발송 용도로만 사용됩니다)
+                  (이메일은 알림 발송 용도로만 사용됩니다)
                 </p>
               </div>
             </div>
