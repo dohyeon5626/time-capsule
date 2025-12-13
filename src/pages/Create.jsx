@@ -213,7 +213,7 @@ const Create = () => {
       reqFormData.append("senderEmail", formData.senderEmail);
       if (formData.passwordKey) reqFormData.append("message", CryptoJS.AES.encrypt('MSG_' + formData.message, formData.passwordKey).toString());
       else reqFormData.append("message", formData.message);
-      reqFormData.append("openDate", formData.openDate + ':00');
+      reqFormData.append("openDate", new Date(formData.openDate + ':00').getTime());
       reqFormData.append("usePasswordKey", Boolean(formData.passwordKey));
       if (uploadedImageUrl) {
         reqFormData.append('originalHeader', uploadedImageUrl.split(',')[0]);

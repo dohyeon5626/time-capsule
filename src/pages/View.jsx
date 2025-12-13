@@ -284,7 +284,7 @@ const View = () => {
 
   const openDateObj = new Date(viewCapsuleData.openDate);
   const deletionDate = new Date(openDateObj);
-  deletionDate.setFullYear(openDateObj.getFullYear() + 1);
+  deletionDate.setFullYear(openDateObj.getFullYear() + 10);
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-white p-6 flex flex-col items-center justify-center font-sans relative overflow-hidden">
@@ -327,7 +327,7 @@ const View = () => {
             </div>
             <div className="flex items-center text-xs text-rose-400/80 mt-1">
               <Trash2 className="w-3.5 h-3.5 mr-1.5" />
-              삭제 예정일: {formatDate(deletionDate)} (1년 보관)
+              삭제 예정일: {formatDate(deletionDate)} (10년 보관)
             </div>
           </div>
 

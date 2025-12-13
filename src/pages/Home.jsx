@@ -216,7 +216,7 @@ const Home = () => {
                     데이터 보관 정책
                   </div>
                   <p className="text-slate-400 text-xs leading-relaxed">
-                    개봉 후 <strong>최대 1년 동안 데이터가 보존</strong>되며,
+                    개봉 후 <strong>최대 10년 동안 데이터가 보존</strong>되며,
                     <br />
                     그 이후에는 영구적으로 삭제됩니다.
                     <br />
