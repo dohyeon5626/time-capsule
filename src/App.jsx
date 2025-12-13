@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 import Create from './pages/Create';
 import Home from './pages/Home';
@@ -93,7 +93,7 @@ export default function App() {
           scrollbar-width: none;
         }
       `}</style>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/new" element={<Create />} />
@@ -101,7 +101,7 @@ export default function App() {
           <Route path="/view" element={<View />} />
           <Route path="*" element={<Home />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
