@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   AlertCircle,
   ArrowRight,
@@ -28,6 +28,28 @@ import { createCapsuleRequest } from '../etc/api';
 import { reSizeImageUrl, fileToDataURL, b64ToBlob } from '../etc/helpers';
 
 const Create = () => {
+  useEffect(() => {
+    document.title = '타임캡슐 작성 | 디지털 타임캡슐';
+
+    let meta = document.querySelector('meta[name="robots"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'robots');
+      meta.setAttribute('content', 'noindex, nofollow');
+      document.head.appendChild(meta);
+    } else {
+      meta.setAttribute('content', 'noindex, nofollow');
+    }
+
+    return () => {
+      const meta = document.querySelector('meta[name="robots"]');
+      if (meta) {
+        document.head.removeChild(meta);
+      }
+      document.title = '디지털 타임캡슐';
+    };
+  }, []);
+
   const [toastMessage, setToastMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({

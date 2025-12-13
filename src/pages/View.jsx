@@ -46,6 +46,28 @@ const View = () => {
   const location = useLocation();
 
   useEffect(() => {
+    document.title = '타임캡슐 보기 | 디지털 타임캡슐';
+
+    let meta = document.querySelector('meta[name="robots"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'robots');
+      meta.setAttribute('content', 'noindex, nofollow');
+      document.head.appendChild(meta);
+    } else {
+      meta.setAttribute('content', 'noindex, nofollow');
+    }
+
+    return () => {
+      const meta = document.querySelector('meta[name="robots"]');
+      if (meta) {
+        document.head.removeChild(meta);
+      }
+      document.title = '디지털 타임캡슐';
+    };
+  }, []);
+
+  useEffect(() => {
     setLoading(true);
     const params = new URLSearchParams(location.search);
     const id = params.get('id');

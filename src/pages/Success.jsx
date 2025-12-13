@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AlertTriangle, Check, Copy, Share2 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -6,6 +6,28 @@ import Toast from '../components/Toast';
 import { copyToClipboard, formatDate } from '../etc/helpers';
 
 const Success = () => {
+  useEffect(() => {
+    document.title = '생성 완료 | 디지털 타임캡슐';
+
+    let meta = document.querySelector('meta[name="robots"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'robots');
+      meta.setAttribute('content', 'noindex, nofollow');
+      document.head.appendChild(meta);
+    } else {
+      meta.setAttribute('content', 'noindex, nofollow');
+    }
+
+    return () => {
+      const meta = document.querySelector('meta[name="robots"]');
+      if (meta) {
+        document.head.removeChild(meta);
+      }
+      document.title = '디지털 타임캡슐';
+    };
+  }, []);
+
   const [toastMessage, setToastMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
