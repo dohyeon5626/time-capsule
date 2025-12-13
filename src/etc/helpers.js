@@ -129,3 +129,16 @@ export const logFormDataEntries = (formData) => { // 테스트용
     }
     console.log("--- 📤 FormData 내용 끝 📤 ---");
 }
+
+export const fileUrlToDataURL = (fileUrl) => {
+    return new Promise(async (resolve, reject) => {
+        const data = await fetch(fileUrl);
+        const blob = await data.blob();
+        const reader = new FileReader();
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+
+    });
+};

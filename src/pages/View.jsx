@@ -13,7 +13,6 @@ import {
   Share2,
   Trash2,
   Unlock,
-  User,
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -25,6 +24,7 @@ import {
   calculateTimeLeft,
   copyToClipboard,
   formatDate,
+  fileUrlToDataURL
 } from '../etc/helpers';
 
 const View = () => {
@@ -40,6 +40,8 @@ const View = () => {
   const [unlockError, setUnlockError] = useState('');
   const [isDecrypting, setIsDecrypting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -47,6 +49,7 @@ const View = () => {
     setLoading(true);
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
+
     if (!id) {
       navigate('/', { state: { message: '잘못된 접근입니다.' } });
       return;
@@ -56,6 +59,9 @@ const View = () => {
       try {
         const data = await getCapsuleRequest(id.trim());
         if (data) {
+          if (data.imgUrl && !data.usePasswordKey) {
+            setUploadedImageUrl(data.imgUrl);
+          }
           setViewCapsuleData({ id: id, ...data });
           if (!data.usePasswordKey) setMessage(data.message);
           setLoading(false);
@@ -79,8 +85,14 @@ const View = () => {
     }
   }, [viewCapsuleData]);
 
-  const handleUnlock = () => {
+  const handleUnlock = async () => {
     const resultMessage = CryptoJS.AES.decrypt(viewCapsuleData.message, viewUnlockPassword).toString(CryptoJS.enc.Utf8);
+    if (viewCapsuleData.imgUrl) {
+      let encryptedBuffer = await fileUrlToDataURL(viewCapsuleData.imgUrl);
+      const encryptedBase64Text = encryptedBuffer.toString('base64').split(',')[1];
+      const decryptedBytes = CryptoJS.AES.decrypt(encryptedBase64Text, viewUnlockPassword).toString(CryptoJS.enc.Utf8);
+      setUploadedImageUrl(`${viewCapsuleData.originalHeader},${decryptedBytes}`);
+    }
 
     if (resultMessage.startsWith('MSG_')) {
       setMessage(resultMessage.substring(4));
@@ -292,13 +304,6 @@ const View = () => {
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] -z-10"></div>
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-600/10 rounded-full blur-[100px] -z-10"></div>
 
-      <button
-        onClick={() => navigate('/')}
-        className="absolute top-6 left-6 text-slate-400 hover:text-white p-2 bg-slate-800/50 rounded-full transition-colors z-20"
-      >
-        <ArrowRight className="w-6 h-6 rotate-180" />
-      </button>
-
       <div
         id="capture-target"
         className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-3xl p-8 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-700"
@@ -342,6 +347,19 @@ const View = () => {
           </button>
         </div>
       </div>
+      
+      {
+        uploadedImageUrl != null ? 
+        <div className="mt-6 w-full max-w-md">
+          <div className="bg-[#1e293b]/50 border border-slate-700 hover:border-slate-500 rounded-xl flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
+            <img 
+              src={uploadedImageUrl} 
+              alt="첨부 이미지" 
+              className="w-full max-w-md h-full object-contain rounded-xl"
+            />
+          </div>
+        </div> : null
+      }
 
       <div className="w-full max-w-md flex flex-col gap-3 mt-6">
         <div className="flex gap-3">

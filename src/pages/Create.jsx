@@ -495,7 +495,7 @@ const Create = () => {
             <div onClick={handleClick} className="bg-[#1e293b]/50 border border-slate-700 hover:border-slate-500 rounded-xl flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
               <img 
                 src={uploadedImageUrl} 
-                alt="File Preview" 
+                alt="첨부 이미지 미리보기" 
                 className="w-full h-full object-contain rounded-xl"
               />
             </div>:
