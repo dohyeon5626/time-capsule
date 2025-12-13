@@ -23,16 +23,13 @@ export const getCapsuleRequest = async (id) => {
 };
 
 export const getStatsRequest = async () => {
-  const capsules = JSON.parse(localStorage.getItem('capsules') || '[]');
-  const now = new Date();
-  let waiting = 0;
-  let sent = 0;
-  capsules.forEach((c) => {
-    if (new Date(c.openDate) > now) {
-      waiting++;
-    } else {
-      sent++;
-    }
+  return new Promise((resolve, reject) => {
+    baseAxios().get(`/time-capsule/subscription-status`)
+      .then(it => it.data)
+      .then(it => resolve({
+        waiting: it.waitingCount,
+        sent: it.sentCount
+      }))
+      .catch(reject);
   });
-  return { waiting, sent };
 };
