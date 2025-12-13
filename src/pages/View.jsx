@@ -48,22 +48,45 @@ const View = () => {
   useEffect(() => {
     document.title = '타임캡슐 보기 | 디지털 타임캡슐';
 
-    let meta = document.querySelector('meta[name="robots"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.setAttribute('name', 'robots');
-      meta.setAttribute('content', 'noindex, nofollow');
-      document.head.appendChild(meta);
+    const metaRobots = document.querySelector('meta[name="robots"]');
+    const originalRobotsContent = metaRobots ? metaRobots.getAttribute('content') : null;
+    if (metaRobots) {
+      metaRobots.setAttribute('content', 'noindex, nofollow');
     } else {
-      meta.setAttribute('content', 'noindex, nofollow');
+      const newMeta = document.createElement('meta');
+      newMeta.setAttribute('name', 'robots');
+      newMeta.setAttribute('content', 'noindex, nofollow');
+      document.head.appendChild(newMeta);
+    }
+    
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    const twitterDesc = document.querySelector('meta[property="twitter:description"]');
+    const originalOgDesc = ogDesc ? ogDesc.getAttribute('content') : '';
+    const originalTwitterDesc = twitterDesc ? twitterDesc.getAttribute('content') : '';
+
+    if (ogDesc) {
+      ogDesc.setAttribute('content', '타임캡슐이 도착했어요. 지금 바로 열어보세요!');
+    }
+    if (twitterDesc) {
+      twitterDesc.setAttribute('content', '타임캡슐이 도착했어요. 지금 바로 열어보세요!');
     }
 
     return () => {
-      const meta = document.querySelector('meta[name="robots"]');
-      if (meta) {
-        document.head.removeChild(meta);
-      }
       document.title = '디지털 타임캡슐';
+      if (metaRobots) {
+        if (originalRobotsContent) {
+          metaRobots.setAttribute('content', originalRobotsContent);
+        } else {
+          document.head.removeChild(metaRobots);
+        }
+      }
+
+      if (ogDesc) {
+        ogDesc.setAttribute('content', originalOgDesc);
+      }
+      if (twitterDesc) {
+        twitterDesc.setAttribute('content', originalTwitterDesc);
+      }
     };
   }, []);
 
@@ -133,7 +156,6 @@ const View = () => {
     if (!viewCapsuleData) return;
     const shareData = {
       title: 'Time Capsule',
-      text: `${viewCapsuleData.senderName}님의 타임캡슐을 확인해보세요.`,
       url: window.location.href,
     };
     if (navigator.share) {

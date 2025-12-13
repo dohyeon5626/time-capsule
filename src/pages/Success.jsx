@@ -42,8 +42,7 @@ const Success = () => {
   const shareLink = async () => {
     const shareData = {
       title: 'Time Capsule',
-      text: `${formData.from || '누군가'}로부터 타임캡슐이 도착했습니다.`,
-      url: `${window.location.origin}${window.location.pathname.replace('success', 'view')}?id=${createdCapsuleId}`,
+      url: `${window.location.origin}/#/view?id=${createdCapsuleId}`,
     };
     if (window.navigator.share) {
       await window.navigator.share(shareData);
