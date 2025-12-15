@@ -10,12 +10,12 @@ import { formatDateSimple } from '../etc/helpers';
 
 const CustomDatePicker = ({ value, onChange, error, id }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [viewDate, setViewDate] = useState(value ? new Date(value) : new Date());
-  const [selectedDate, setSelectedDate] = useState(value ? new Date(value) : new Date());
+  const [viewDate, setViewDate] = useState(value ? new Date(value) : new Date(new Date().getTime() + 1000 * 60 * 60));
+  const [selectedDate, setSelectedDate] = useState(value ? new Date(value) : new Date(new Date().getTime() + 1000 * 60 * 60));
   const getInitialHour = () => {
     if (value) return new Date(value).getHours();
     const now = new Date();
-    return now.getHours() + 1;
+    return (now.getHours() + 1) % 24;
   };
   const [selectedHour, setSelectedHour] = useState(getInitialHour());
 
@@ -51,16 +51,17 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
   const handleDateClick = (day) => {
     const newDate = new Date(viewDate);
     newDate.setDate(day);
-    newDate.setHours(selectedHour);
+    newDate.setHours(selectedHour%24);
     setViewDate(newDate);
     setSelectedDate(newDate);
+    console.log(newDate)
 
     const now = new Date();
     const maxTime = new Date();
     maxTime.setFullYear(now.getFullYear() + 10);
 
     if (newDate <= now) {
-      setSelectedHour(now.getHours() + 1);
+      setSelectedHour((now.getHours() + 1) % 24);
     } else if (newDate >= maxTime) {
       setSelectedHour(now.getHours());
     }
@@ -96,7 +97,7 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
     for (let i = 1; i <= daysInMonth; i++) {
       const d = new Date(year, month, i);
       const dTime = d.getTime();
-      const isPast = dTime < todayStart;
+      const isPast = dTime < todayStart || (dTime == todayStart && now.getHours() >= 11);
       const isOverMaxTime = dTime > maxTime;
       const isSelected = selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year;
       const isToday = now.toDateString() === d.toDateString();
