@@ -242,7 +242,7 @@ const Home = () => {
       <footer className="w-full border-t border-slate-800/50 bg-[#0f172a] py-6 mt-auto">
         <div className="max-w-md mx-auto px-6 flex items-center justify-between text-slate-500">
           <a
-            href="mailto:developer@dohyeon5626.com"
+            href="mailto:time-capsule@dohyeon5626.com"
             className="hover:text-blue-400 transition-colors p-2 hover:bg-slate-800 rounded-lg"
             aria-label="Email"
           >
@@ -254,7 +254,7 @@ const Home = () => {
           </span>
 
           <a
-            href="https://github.com/dohyeon5626"
+            href="https://github.com/dohyeon5626/time-capsule"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white transition-colors p-2 hover:bg-slate-800 rounded-lg"
