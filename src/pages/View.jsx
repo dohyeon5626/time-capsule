@@ -225,12 +225,12 @@ const View = () => {
               </div>
             ))}
           </div>
-          <button
+          {/* <button
             onClick={() => setForceUnlock(true)}
             className="mt-12 text-[10px] text-slate-600 hover:text-rose-500 transition-colors border border-slate-800 hover:border-rose-500/30 px-3 py-1 rounded bg-slate-900"
           >
             DEV: 즉시 해제 (테스트용)
-          </button>
+          </button> */}
         </div>
       </div>
     );
