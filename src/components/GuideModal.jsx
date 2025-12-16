@@ -59,7 +59,7 @@ const GuideModal = ({ isOpen, onClose }) => {
               <h4 className="text-white font-bold text-sm mb-1">보관 및 공유</h4>
               <p className="text-slate-400 text-xs leading-relaxed">
                 개봉 날짜가 되면{' '}
-                <strong>받는 사람의 전화번호로 알림톡</strong>이 발송됩니다.
+                <strong>받는 사람에게 이메일</strong>이 발송됩니다.
               </p>
             </div>
           </div>
