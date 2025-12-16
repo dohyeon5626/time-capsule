@@ -239,10 +239,10 @@ const Create = () => {
       reqFormData.append("usePasswordKey", Boolean(formData.passwordKey));
       if (uploadedImageUrl) {
         reqFormData.append('originalHeader', uploadedImageUrl.split(',')[0]);
-        if(uploadedImageFile) {
+        if(uploadedImageFile && !formData.passwordKey) {
           reqFormData.append("image", uploadedImageFile);
         } else {
-          if (formData.passwordKey) {
+          if (Boolean(formData.passwordKey)) {
             const imageCiphertext = CryptoJS.AES.encrypt(uploadedImageUrl.split(',')[1], formData.passwordKey).toString();
             reqFormData.append('image', b64ToBlob(imageCiphertext), 'encrypted_original.dat');
           } else {

@@ -359,7 +359,7 @@ const View = () => {
 
           <button
             onClick={() => {
-              copyToClipboard(viewCapsuleData.message);
+              copyToClipboard(message);
               setToastMessage('내용이 복사되었습니다.');
             }}
             className="text-[10px] flex items-center gap-1 text-slate-400 hover:text-blue-400 transition-colors bg-slate-800 rounded h-fit mt-4"
