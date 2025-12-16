@@ -75,6 +75,7 @@ const Create = () => {
   const handleClick = () => {
     if (uploadedImageUrl) {
       setUploadedImageUrl(null);
+      fileInputRef.current.value = "";
       return;
     }
     fileInputRef.current.click();
