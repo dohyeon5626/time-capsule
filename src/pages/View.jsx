@@ -151,11 +151,21 @@ const View = () => {
 
     const capture = (el) => {
       window
-        .html2canvas(el, { backgroundColor: '#0f172a' })
+        .html2canvas(el, { backgroundColor: '#0f172a', useCORS: true, allowTaint: true})
         .then((canvas) => {
+          const newCanvas = document.createElement('canvas');
+          const ctx = newCanvas.getContext('2d');
+
+          newCanvas.width = canvas.width + 80;
+          newCanvas.height = canvas.height + 80;
+
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+          ctx.drawImage(canvas, 40, 40);
+
           const link = document.createElement('a');
           link.download = `timecapsule-${viewCapsuleData.id}.png`;
-          link.href = canvas.toDataURL();
+          link.href = newCanvas.toDataURL();
           link.click();
           setToastMessage('이미지가 저장되었습니다.');
         })
@@ -324,63 +334,63 @@ const View = () => {
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] -z-10"></div>
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-600/10 rounded-full blur-[100px] -z-10"></div>
-
-      <div
-        id="capture-target"
-        className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-3xl p-8 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-700"
-      >
-        <div className="flex justify-between items-end mb-8 border-b border-slate-700/50 pb-4">
-          <span className="text-left text-[10px] text-slate-500 font-bold uppercase tracking-widest block">
-            From {viewCapsuleData.senderName}
-          </span>
-        </div>
-
-        <div className="mb-8 relative">
-          <p className="whitespace-pre-wrap leading-loose text-slate-100 text-sm font-light relative z-10">
-            {message}
-          </p>
-        </div>
-
-        <div className="flex items-end justify-between pt-4 border-t border-slate-700/50 flex-wrap">
-          <div className="flex flex-col">
-            <div className="flex items-center text-xs text-slate-500">
-              <CalendarIcon className="w-3.5 h-3.5 mr-1.5" />
-              작성일: {formatDate(new Date(viewCapsuleData.createdAt))}
-            </div>
-            <div className="flex items-center text-xs text-slate-500">
-              <Clock className="w-3.5 h-3.5 mr-1.5" />
-              개봉일: {formatDate(new Date(viewCapsuleData.openDate))}
-            </div>
-            <div className="flex items-center text-xs text-rose-400/80 mt-1">
-              <Trash2 className="w-3.5 h-3.5 mr-1.5" />
-              삭제 예정일: {formatDate(deletionDate)} (10년 보관)
-            </div>
+      <div id="capture-target">
+        <div
+          className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-3xl p-8 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-700"
+        >
+          <div className="flex justify-between items-end mb-8 border-b border-slate-700/50 pb-4">
+            <span className="text-left text-[10px] text-slate-500 font-bold uppercase tracking-widest block">
+              From {viewCapsuleData.senderName}
+            </span>
           </div>
 
-          <button
-            onClick={() => {
-              copyToClipboard(message);
-              setToastMessage('내용이 복사되었습니다.');
-            }}
-            className="text-[10px] flex items-center gap-1 text-slate-400 hover:text-blue-400 transition-colors bg-slate-800 rounded h-fit mt-4"
-          >
-            <Copy className="w-3 h-3" /> 내용 복사
-          </button>
+          <div className="mb-8 relative">
+            <p className="whitespace-pre-wrap leading-loose text-slate-100 text-sm font-light relative z-10">
+              {message}
+            </p>
+          </div>
+
+          <div className="flex items-end justify-between pt-4 border-t border-slate-700/50 flex-wrap">
+            <div className="flex flex-col">
+              <div className="flex items-center text-xs text-slate-500">
+                <CalendarIcon className="w-3.5 h-3.5 mr-1.5" />
+                작성일: {formatDate(new Date(viewCapsuleData.createdAt))}
+              </div>
+              <div className="flex items-center text-xs text-slate-500">
+                <Clock className="w-3.5 h-3.5 mr-1.5" />
+                개봉일: {formatDate(new Date(viewCapsuleData.openDate))}
+              </div>
+              <div className="flex items-center text-xs text-rose-400/80 mt-1">
+                <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+                삭제 예정일: {formatDate(deletionDate)} (10년 보관)
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                copyToClipboard(message);
+                setToastMessage('내용이 복사되었습니다.');
+              }}
+              className="text-[10px] flex items-center gap-1 text-slate-400 hover:text-blue-400 transition-colors bg-slate-800 rounded h-fit mt-4"
+            >
+              <Copy className="w-3 h-3" /> 내용 복사
+            </button>
+          </div>
         </div>
+        
+        {
+          uploadedImageUrl != null ? 
+          <div className="mt-6 w-full max-w-md">
+            <div className="bg-[#1e293b]/50 border border-slate-700 hover:border-slate-500 rounded-xl flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
+              <img 
+                src={uploadedImageUrl} 
+                alt="첨부 이미지" 
+                className="w-full max-w-md h-full object-contain rounded-xl"
+              />
+            </div>
+          </div> : null
+        }
       </div>
-      
-      {
-        uploadedImageUrl != null ? 
-        <div className="mt-6 w-full max-w-md">
-          <div className="bg-[#1e293b]/50 border border-slate-700 hover:border-slate-500 rounded-xl flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
-            <img 
-              src={uploadedImageUrl} 
-              alt="첨부 이미지" 
-              className="w-full max-w-md h-full object-contain rounded-xl"
-            />
-          </div>
-        </div> : null
-      }
 
       <div className="w-full max-w-md flex flex-col gap-3 mt-6">
         <div className="flex gap-3">
