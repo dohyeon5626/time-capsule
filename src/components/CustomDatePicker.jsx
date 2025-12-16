@@ -97,7 +97,7 @@ const CustomDatePicker = ({ value, onChange, error, id }) => {
     for (let i = 1; i <= daysInMonth; i++) {
       const d = new Date(year, month, i);
       const dTime = d.getTime();
-      const isPast = dTime < todayStart || (dTime == todayStart && now.getHours() >= 11);
+      const isPast = dTime < todayStart || (dTime == todayStart && now.getHours() >=23);
       const isOverMaxTime = dTime > maxTime;
       const isSelected = selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year;
       const isToday = now.toDateString() === d.toDateString();
