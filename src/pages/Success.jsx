@@ -72,7 +72,7 @@ const Success = () => {
         ) : (
           <span className="text-slate-400">지정된 수신자</span>
         )}
-        에게 알림톡이 전송됩니다.
+        에게 이메일로 타임캡슐이 전송됩니다.
       </p>
 
       {!formData.passwordKey && (
@@ -84,14 +84,14 @@ const Success = () => {
             </div>
             <p className="text-amber-200/70 text-[11px] leading-relaxed">
               암호키를 설정하지 않았으므로,{' '}
-              <strong>캡슐 코드만 있으면 누구나</strong> 내용을 볼 수 있습니다.
-              코드 공유 시 유의해주세요.
+              <strong>링크만 있으면 누구나</strong> 내용을 볼 수 있습니다.
+              링크 공유 시 유의해주세요.
             </p>
           </div>
         </div>
       )}
 
-      <div
+      {/* <div
         className="w-full max-w-xs bg-[#1e293b] border border-slate-700 rounded-2xl p-6 mb-4 relative group cursor-pointer hover:border-blue-500/50 transition-all shadow-xl"
         onClick={() => {
           copyToClipboard(createdCapsuleId);
@@ -107,7 +107,7 @@ const Success = () => {
         <div className="absolute top-1/2 -translate-y-1/2 right-4 p-2 bg-slate-800 rounded-lg group-hover:bg-blue-600 group-hover:text-white text-slate-500 transition-colors">
           <Copy className="w-5 h-5" />
         </div>
-      </div>
+      </div> */}
 
       <button
         onClick={shareLink}
