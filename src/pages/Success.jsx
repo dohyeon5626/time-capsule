@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AlertTriangle, Check, Copy, Share2 } from 'lucide-react';
+import { AlertTriangle, Check, Home, Copy, Share2 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import Toast from '../components/Toast';
@@ -42,7 +42,7 @@ const Success = () => {
   const shareLink = async () => {
     const shareData = {
       title: 'Time Capsule',
-      url: `${window.location.origin}/#/view?id=${createdCapsuleId}`,
+      url: `${window.location.origin}`,
     };
     if (window.navigator.share) {
       await window.navigator.share(shareData);
@@ -91,30 +91,31 @@ const Success = () => {
         </div>
       )}
 
-      {/* <div
-        className="w-full max-w-xs bg-[#1e293b] border border-slate-700 rounded-2xl p-6 mb-4 relative group cursor-pointer hover:border-blue-500/50 transition-all shadow-xl"
+      <div
+        className="w-full max-w-xs bg-[#1e293b] border border-slate-700 rounded-2xl p-6 pr-14 mb-4 relative group cursor-pointer hover:border-blue-500/50 transition-all shadow-xl"
         onClick={() => {
-          copyToClipboard(createdCapsuleId);
-          setToastMessage('캡슐 코드가 복사되었습니다.');
+          copyToClipboard(`${window.location.origin}/#/view?id=${createdCapsuleId}`);
+          setToastMessage('캡슐 접근 링크가 복사되었습니다.');
         }}
       >
-        <div className="text-xs text-slate-500 mb-2 text-left font-medium uppercase tracking-wider">
-          캡슐 코드
+        <div className="text-xs text-slate-500 mb-2 text-left uppercase tracking-wider">
+          <p className='font-bold'>캡슐 접근 링크</p>
+          <p className='text-[9px] text-pretty leading-none'>이메일로 접근 경로를 전달드리니 저장하실 필요 없습니다.</p>
         </div>
-        <div className="font-mono text-l font-bold text-blue-400 break-all">
-          {createdCapsuleId}
+        <div className="font-mono text-xs font-bold text-blue-400 break-all">
+          <p className='leading-none text-left text-pretty'>{`${window.location.origin}/#/view?id=${createdCapsuleId}`}</p>
         </div>
         <div className="absolute top-1/2 -translate-y-1/2 right-4 p-2 bg-slate-800 rounded-lg group-hover:bg-blue-600 group-hover:text-white text-slate-500 transition-colors">
           <Copy className="w-5 h-5" />
         </div>
-      </div> */}
+      </div>
 
       <button
         onClick={shareLink}
         className="w-full max-w-xs py-3.5 mb-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-lg"
       >
         <Share2 className="w-4 h-4" />
-        링크로 공유하기
+        친구에게 추천하기
       </button>
 
       {/* <div className="w-full max-w-xs mb-4">
@@ -125,9 +126,9 @@ const Success = () => {
         onClick={() => {
           navigate('/');
         }}
-        className="w-full max-w-xs py-3.5 rounded-xl border border-slate-700 text-slate-400 text-sm hover:text-white hover:bg-slate-800 transition-colors"
+        className="w-full max-w-xs py-3.5 rounded-xl border border-slate-700 text-slate-400 text-sm hover:text-white hover:bg-slate-800 flex items-center justify-center gap-2 transition-colors shadow-lg"
       >
-        홈으로 돌아가기
+        <Home className="w-4 h-4" /> 홈으로 돌아가기
       </button>
     </div>
   );
