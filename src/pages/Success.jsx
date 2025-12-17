@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AlertTriangle, Check, Home, Copy, Share2 } from 'lucide-react';
+import { AlertTriangle, Check, Home, Share2 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import Toast from '../components/Toast';
@@ -39,7 +39,7 @@ const Success = () => {
 
   const { formData, recipients, createdCapsuleId } = location.state;
 
-  const shareLink = async () => {
+  const shareCreateLink = async () => {
     const shareData = {
       title: 'Time Capsule',
       url: `${window.location.origin}`,
@@ -91,27 +91,8 @@ const Success = () => {
         </div>
       )}
 
-      <div
-        className="w-full max-w-xs bg-[#1e293b] border border-slate-700 rounded-2xl p-6 pr-14 mb-4 relative group cursor-pointer hover:border-blue-500/50 transition-all shadow-xl"
-        onClick={() => {
-          copyToClipboard(`${window.location.origin}/#/view?id=${createdCapsuleId}`);
-          setToastMessage('캡슐 접근 링크가 복사되었습니다.');
-        }}
-      >
-        <div className="text-xs text-slate-500 mb-2 text-left uppercase tracking-wider">
-          <p className='font-bold'>캡슐 접근 링크</p>
-          <p className='text-[9px] text-pretty leading-none'>이메일로 접근 경로를 전달드리니 저장하실 필요 없습니다.</p>
-        </div>
-        <div className="font-mono text-xs font-bold text-blue-400 break-all">
-          <p className='leading-none text-left text-pretty'>{`${window.location.origin}/#/view?id=${createdCapsuleId}`}</p>
-        </div>
-        <div className="absolute top-1/2 -translate-y-1/2 right-4 p-2 bg-slate-800 rounded-lg group-hover:bg-blue-600 group-hover:text-white text-slate-500 transition-colors">
-          <Copy className="w-5 h-5" />
-        </div>
-      </div>
-
       <button
-        onClick={shareLink}
+        onClick={shareCreateLink}
         className="w-full max-w-xs py-3.5 mb-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-lg"
       >
         <Share2 className="w-4 h-4" />
