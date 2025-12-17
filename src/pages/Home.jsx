@@ -61,8 +61,7 @@ const Home = () => {
   const handleShareSite = async () => {
     const url = window.location.origin + window.location.pathname;
     const shareData = {
-      title: '메멘토 - 타임캡슐',
-      text: '미래로 보내는 당신의 이야기',
+      title: 'Time Capsule',
       url: url,
     };
     if (window.navigator.share) {
