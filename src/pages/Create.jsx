@@ -435,7 +435,7 @@ const Create = () => {
             <div className="mt-2 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
               <div className="flex items-start gap-2">
                 <Info className="w-3.5 h-3.5 text-blue-500 mt-0.5 shrink-0" />
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className="text-[11px] text-slate-400 leading-relaxed text-balance break-keep">
                   개봉 날짜가 되면 입력하신 이메일로{' '}
                   <strong>알림이 발송됩니다.</strong>
                   <br />
@@ -577,7 +577,7 @@ const Create = () => {
             <div className="mt-2 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
               <div className="flex items-start gap-2">
                 <Lock className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className="text-[11px] text-slate-400 leading-relaxed text-balance break-keep">
                   입력하신 키로 메시지 및 사진이 암호화되어 저장되므로,<br/> 오직 키를 가진 사람만 메시지 및 사진을 볼 수 있습니다.<br/>
                   서버에 암호키를 저장하지 않기 때문에, <br/>
                   <strong className="text-emerald-400">키를 분실하시면 복구가 불가능합니다.</strong> 안전하게 보관해 주세요.

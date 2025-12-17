@@ -82,7 +82,7 @@ const Success = () => {
             <div className="text-amber-400 font-bold text-xs mb-1">
               보안 주의
             </div>
-            <p className="text-amber-200/70 text-[11px] leading-relaxed">
+            <p className="text-amber-200/70 text-[11px] leading-relaxed text-balance break-keep">
               암호키를 설정하지 않았으므로,{' '}
               <strong>링크만 있으면 누구나</strong> 내용을 볼 수 있습니다.
               링크 공유 시 유의해주세요.

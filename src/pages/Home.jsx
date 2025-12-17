@@ -194,7 +194,7 @@ const Home = () => {
                   <div className="font-bold text-slate-200 text-sm mb-1">
                     철저한 보안 암호화
                   </div>
-                  <p className="text-slate-400 text-xs leading-relaxed">
+                  <p className="text-slate-400 text-xs leading-relaxed text-balance break-keep">
                     암호키 설정 시 <strong>AES 알고리즘</strong>이 적용되어
                     사용자가 설정한 <strong>암호키</strong> 없이는 복호화가
                     불가능합니다. (메시지, 사진 암호화)<br />
@@ -214,7 +214,7 @@ const Home = () => {
                   <div className="font-bold text-slate-200 text-sm mb-1">
                     데이터 보관 정책
                   </div>
-                  <p className="text-slate-400 text-xs leading-relaxed">
+                  <p className="text-slate-400 text-xs leading-relaxed text-balance break-keep">
                     개봉 후 <strong>최대 10년 동안 데이터가 보존</strong>되며,
                     <br />
                     그 이후에는 영구적으로 삭제됩니다.
