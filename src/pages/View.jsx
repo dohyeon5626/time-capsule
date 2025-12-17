@@ -151,11 +151,22 @@ const View = () => {
 
     const capture = (el) => {
       window
-        .html2canvas(el, { backgroundColor: '#0f172a', useCORS: true, allowTaint: true})
+        .html2canvas(el, {
+          backgroundColor: '#0f172a', useCORS: true, allowTaint: true,
+          onclone: (documentClone) => {
+            documentClone.body.querySelector('#scheduled-deletion-date').remove();
+            documentClone.body.querySelector('#copy-message-button').remove();
+
+            const textElementList = documentClone.querySelectorAll('#image-error-box p');
+            for (let textElement of textElementList) {
+              textElement.style.position = 'relative'; 
+              textElement.style.top = '-5px';
+            }
+          }
+        })
         .then((canvas) => {
           const newCanvas = document.createElement('canvas');
           const ctx = newCanvas.getContext('2d');
-
           newCanvas.width = canvas.width + 80;
           newCanvas.height = canvas.height + 80;
 
@@ -334,7 +345,7 @@ const View = () => {
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] -z-10"></div>
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-600/10 rounded-full blur-[100px] -z-10"></div>
-      <div id="capture-target">
+      <div id="capture-target" className="w-full max-w-md">
         <div
           className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-3xl p-8 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-700"
         >
@@ -351,22 +362,23 @@ const View = () => {
           </div>
 
           <div className="flex items-end justify-between pt-4 border-t border-slate-700/50 flex-wrap">
-            <div className="flex flex-col">
-              <div className="flex items-center text-xs text-slate-500">
+            <div id="image-error-box" className="flex flex-col">
+              <div className="flex items-center text-xs text-slate-500 h-3.5">
                 <CalendarIcon className="w-3.5 h-3.5 mr-1.5" />
-                작성일: {formatDate(new Date(viewCapsuleData.createdAt))}
+                <p className="h-3.5 leading-none">작성일: {formatDate(new Date(viewCapsuleData.createdAt))}</p>
               </div>
-              <div className="flex items-center text-xs text-slate-500">
+              <div className="flex items-center text-xs text-slate-500 mt-1 h-3.5">
                 <Clock className="w-3.5 h-3.5 mr-1.5" />
-                개봉일: {formatDate(new Date(viewCapsuleData.openDate))}
+                <p className="h-3.5 leading-none">개봉일: {formatDate(new Date(viewCapsuleData.openDate))}</p>
               </div>
-              <div className="flex items-center text-xs text-rose-400/80 mt-1">
+              <div id="scheduled-deletion-date" className="flex items-center text-xs text-rose-400/80 mt-1 h-3.5">
                 <Trash2 className="w-3.5 h-3.5 mr-1.5" />
-                삭제 예정일: {formatDate(deletionDate)} (10년 보관)
+                <p className="h-3.5 leading-none">삭제 예정일: {formatDate(deletionDate)} (10년 보관)</p>
               </div>
             </div>
 
             <button
+              id="copy-message-button"
               onClick={() => {
                 copyToClipboard(message);
                 setToastMessage('내용이 복사되었습니다.');
