@@ -6,8 +6,9 @@
 <img width="100%" align=center alt="readme" src="https://github.com/user-attachments/assets/30ca37f5-b16c-4c89-96a8-d620b2ed6402">
 <br/><br/>
 
-타임캡슐을 작성하고 해당 시간에 이메일로 받아볼 수 있는 서비스를 제공하는 프로젝트입니다.  
-암호키를 설정할 시 메세지, 사진이 모두 암호화되어 저장되어 개발자도 볼 수 없도록 하는 기능도 제공합니다.
+타임캡슐을 작성하고 해당 시간에 이메일로 받아볼 수 있는 서비스를 제공하는 프로젝트입니다.<br/>
+암호키를 설정할 시 메세지, 사진이 모두 암호화되어 저장되어 개발자도 볼 수 없도록 하는 기능도 제공합니다.<br/>
+암호화시 AES 알고리즘을 사용하며 사진의 경우 Base64 형태의 Data URL로 바꾼 후 암호화 진행 후 저장합니다.
 
 [Time Capsule Page](https://time-capsule.dohyeon5626.com)<br/>
 > with [api](https://github.com/dohyeon5626/serverless-functions/tree/main/time-capsule)
