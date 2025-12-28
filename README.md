@@ -1,4 +1,4 @@
-# Time Capsule<img src="https://github.com/user-attachments/assets/2f0c16ab-1a40-44f7-bf7e-e10b66a28522" align=left width=100>
+# Time Capsule<img src="https://github.com/user-attachments/assets/a36b3703-451c-4d89-a655-9ea7f25ac973" align=left width=100>
 
 ![GitHub License](https://img.shields.io/github/license/dohyeon5626/time-capsule?style=flat&color=green) ![GitHub deployments](https://img.shields.io/github/deployments/dohyeon5626/time-capsule/github-pages?style=flat&label=page%20deploy&color=green) ![Website](https://img.shields.io/website?url=https%3A%2F%2Ftime-capsule.dohyeon5626.com%2F&up_message=running&up_color=blue&down_message=not%20running&down_color=red&style=flat&label=page)
 <br/><br/>
