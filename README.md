@@ -10,5 +10,5 @@
 암호키를 설정할 시 메세지, 사진이 모두 암호화되어 저장되어 개발자도 볼 수 없도록 하는 기능도 제공합니다.<br/>
 암호화시 AES 알고리즘을 사용하며 사진의 경우 Base64 형태의 Data URL로 바꾼 후 암호화 진행 후 저장합니다.
 
-[Time Capsule Page](https://time-capsule.dohyeon5626.com)<br/>
-> with [api](https://github.com/dohyeon5626/serverless-functions/tree/main/time-capsule)
+[Time Capsule Page](https://time-capsule.dohyeon5626.com)로 이동하면 누구나 타임캡슐을 작성해볼 수 있습니다.
+> [Serverless Functions](https://github.com/dohyeon5626/serverless-functions/tree/main/time-capsule)와 함께 운영중입니다.
