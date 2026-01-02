@@ -3,7 +3,7 @@
 ![GitHub License](https://img.shields.io/github/license/dohyeon5626/time-capsule?style=flat&color=green) ![GitHub deployments](https://img.shields.io/github/deployments/dohyeon5626/time-capsule/github-pages?style=flat&label=page%20deploy&color=green) ![Website](https://img.shields.io/website?url=https%3A%2F%2Ftime-capsule.dohyeon5626.com%2F&up_message=running&up_color=blue&down_message=not%20running&down_color=red&style=flat&label=page)
 <br/><br/>
 
-> 위 프로젝트는 Stitch로 디자인되고, Gemini로 상당 부분이 개발되었습니다.
+> 위 프로젝트는 Stitch로 디자인되고, Gemini로 웹사이트의 상당 부분이 개발되었습니다.
 
 <img width="100%" align=center alt="readme" src="https://github.com/user-attachments/assets/30ca37f5-b16c-4c89-96a8-d620b2ed6402">
 <br/><br/>
